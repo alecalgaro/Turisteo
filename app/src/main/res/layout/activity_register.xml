@@ -1,10 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/containerLogin"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".register.RegisterActivity"
+    android:padding="25dp"
+    android:orientation="vertical"
+    android:gravity="center"
     android:background="@color/white">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logo"
+        android:transitionName="logo_transition"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrate para empezar a usar TuristApp"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:transitionName="textTransition"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textField_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:hint="Correo"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textField_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:hint="Contraseña"
+        app:passwordToggleEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crear cuenta"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="40dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_goToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:text="¿Ya tienes una cuenta? \n presiona aquí para ingresar"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:textColor="@color/grey"
+        android:clickable="true"
+        android:focusable="true"
+        />
+
+</LinearLayout>
