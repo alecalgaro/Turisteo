@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.example.turisteo.R;
 import com.example.turisteo.home.HomeActivity;
 import com.example.turisteo.login.LoginActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -43,11 +45,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Obtengo si hay un usuario con sesion iniciada
+                // Obtengo si hay un usuario con sesion iniciada (con email y contraseña)
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                // Y para la parte de login con gmail se usa la siguiente linea, y nos va a decir si el usuario ya inicio sesion
+                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(SplashScreenActivity.this);
 
-                // Si hay un usuario con sesion iniciada abro la pantalla de Home luego del Splash Screen
-                if(user != null){
+                // Si hay un usuario con sesion iniciada abro la pantalla de Home luego del Splash Screen.
+                // Compruebo si se inicio sesion con email y contraseña (user) o si se inicio sesion con gmail (account)
+                if(user != null && account != null){
                     Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

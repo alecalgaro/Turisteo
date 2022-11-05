@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         btn_register = findViewById(R.id.btn_register);
         TextView tv_goToLogin = findViewById(R.id.tv_goToLogin);
 
-        // Registro al presionar el boton
+        // Boton para registrar usuario
         btn_register.setOnClickListener(v -> {
             validateData();
         });
