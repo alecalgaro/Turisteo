@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.turisteo.MainActivity;
 import com.example.turisteo.R;
 import com.example.turisteo.home.HomeActivity;
 import com.example.turisteo.register.RegisterActivity;
@@ -26,7 +25,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.regex.Pattern;
@@ -34,7 +32,7 @@ import java.util.regex.Pattern;
 public class LoginActivity extends AppCompatActivity {
 
     Button btn_login;
-    TextView tv_goToRegister;
+    TextView tv_goToRegister, tv_forgotPassword;
 
     // Para login con Firebase usando email y password
     TextInputEditText textField_email;
@@ -55,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         textField_password = findViewById(R.id.textField_password);
         btn_login = findViewById(R.id.btn_login);
         tv_goToRegister = findViewById(R.id.tv_goToRegister);
+        tv_forgotPassword = findViewById(R.id.tv_forgotPassword);
         btn_loginGoogle = findViewById(R.id.btn_loginGoogle);
 
         mAuth = FirebaseAuth.getInstance();
@@ -76,6 +75,14 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Para recuperar contraseña
+        tv_forgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            //finish();
+        });
 
         // Si no tiene una cuenta
         tv_goToRegister.setOnClickListener(v -> {
