@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.home.HomeActivity;
+import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){    // si se registro con exito
-                            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         }else{      // si hubo un error y no se pudo registrar el usuario

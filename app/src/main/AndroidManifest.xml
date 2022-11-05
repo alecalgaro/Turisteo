@@ -13,9 +13,8 @@
         android:theme="@style/Theme.Turisteo">
         <activity android:name=".login.ForgotPasswordActivity"></activity>
         <activity android:name=".register.RegisterActivity" />
-        <activity android:name=".home.HomeActivity" />
+        <activity android:name=".home.MainActivity" />
         <activity android:name=".login.LoginActivity" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".splashscreen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

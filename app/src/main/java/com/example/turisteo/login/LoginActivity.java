@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.home.HomeActivity;
+import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.register.RegisterActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){    // si la comprobacion con Firebase fue correcta, inicia la sesion
-                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             finish();
@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){    // si es exitoso el inicio de sesion
-                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             finish();

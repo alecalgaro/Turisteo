@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.turisteo.R;
-import com.example.turisteo.home.HomeActivity;
+import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.login.LoginActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -53,7 +53,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 // Si hay un usuario con sesion iniciada abro la pantalla de Home luego del Splash Screen.
                 // Compruebo si se inicio sesion con email y contraseña (user) o si se inicio sesion con gmail (account)
                 if(user != null && account != null){
-                    Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
