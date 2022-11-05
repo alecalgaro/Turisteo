@@ -7,8 +7,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.turisteo.R;
+import com.example.turisteo.home.AdapterPlaces;
+import com.example.turisteo.home.Place;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +21,11 @@ import com.example.turisteo.R;
  * create an instance of this fragment.
  */
 public class FavoritesFragment extends Fragment {
+
+    // Adapter y ListView
+    private ListView lv_favorites;
+    private AdapterFavorites adapterFavorites;
+    //private ArrayList<Favorite> arrayList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,7 +70,26 @@ public class FavoritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false);
+        View viewFavorites = inflater.inflate(R.layout.fragment_favorites, container, false);
+
+        // El arrayList lo creo aca, de forma local dentro del onCreateView porque si lo pongo de forma global, al seleccionar un lugar
+        // y luego volver con el botón hacia atrás, la lista de lugares se vuelve a llenar y se duplican.
+        ArrayList<Favorite> arrayList = new ArrayList<>();
+
+        lv_favorites = (ListView) viewFavorites.findViewById(R.id.lv_favorites);
+
+        adapterFavorites = new AdapterFavorites(getContext(), arrayList);
+        lv_favorites.setAdapter(adapterFavorites);
+
+        // Creo y añado al array las películas (las hago acá y no fuera en una función porque tuve que poner el arrayDatos de forma local acá dentro):
+        String title = "Nombre del lugar";
+
+        arrayList.add(new Favorite("1", R.drawable.img_card_place, title));
+        arrayList.add(new Favorite("2", R.drawable.img_card_place, title));
+        arrayList.add(new Favorite("3", R.drawable.img_card_place, title));
+
+        return viewFavorites;       // para utilizar ese objeto viewPlaces dentro del activity
     }
 }

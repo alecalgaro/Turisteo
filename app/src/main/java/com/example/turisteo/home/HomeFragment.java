@@ -23,7 +23,7 @@ public class HomeFragment extends Fragment {
     // Adapter y ListView
     private ListView lv_places;
     private AdapterPlaces adapterPlaces;
-    private ArrayList<Place> arrayList = new ArrayList<>();
+    //private ArrayList<Place> arrayList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,12 +82,12 @@ public class HomeFragment extends Fragment {
         lv_places.setAdapter(adapterPlaces);
 
         // Creo y añado al array las películas (las hago acá y no fuera en una función porque tuve que poner el arrayDatos de forma local acá dentro):
-        String title = "Chajari";
-        String descripcion = "Ciudad de amigos";
+        String title = "Nombre del lugar";
+        String descripcion = "Descripción breve del lugar";
 
         arrayList.add(new Place("1", R.drawable.img_card_place, title, descripcion));
-        arrayList.add(new Place("1", R.drawable.img_card_place, title, descripcion));
-        arrayList.add(new Place("1", R.drawable.img_card_place, title, descripcion));
+        arrayList.add(new Place("2", R.drawable.img_card_place, title, descripcion));
+        arrayList.add(new Place("3", R.drawable.img_card_place, title, descripcion));
 
         return viewPlaces;       // para utilizar ese objeto viewPlaces dentro del activity
 

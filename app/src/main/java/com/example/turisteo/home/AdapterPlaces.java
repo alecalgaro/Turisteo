@@ -40,7 +40,7 @@ public class AdapterPlaces extends BaseAdapter {      // recordar que extiende d
     @Override
     public View getView(int position, View view, ViewGroup parent) {
 
-        // Objeto para cada item (clase) a mostrar:
+        // Objeto para cada item (lugar) a mostrar:
         final Place place = (Place) getItem(position);
 
         view = LayoutInflater.from(context).inflate(R.layout.card_place, null);    // "inflamos" la lista de items, es como para convertir un layout en un View
