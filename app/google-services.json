@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "873262117817",
+    "project_id": "turisteo-f2e9e",
+    "storage_bucket": "turisteo-f2e9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873262117817:android:ae1f59d636f85a8d873c68",
+        "android_client_info": {
+          "package_name": "com.example.turisteo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873262117817-gs43joncg17hhddjgooq9up80ob2g50n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPxn76X1EOmszlNh0GvCSMzOe5xTi09ng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873262117817-gs43joncg17hhddjgooq9up80ob2g50n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

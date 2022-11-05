@@ -11,9 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.turisteo.R;
+import com.example.turisteo.home.HomeActivity;
 import com.example.turisteo.login.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreenActivity extends AppCompatActivity {
+
+    TextView tvSplashScreen;
+    ImageView imgLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +34,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         Animation animationLogo = AnimationUtils.loadAnimation(this, R.anim.animation_logo);
         Animation animationTextSplash = AnimationUtils.loadAnimation(this, R.anim.animation_text_splash);
 
-        TextView tvSplashScreen = findViewById(R.id.tvSplashScreen);
-        ImageView imgLogo = findViewById(R.id.imgLogo);
+        tvSplashScreen = findViewById(R.id.tvSplashScreen);
+        imgLogo = findViewById(R.id.imgLogo);
         tvSplashScreen.setAnimation(animationTextSplash);
         imgLogo.setAnimation(animationLogo);
 
@@ -37,11 +43,21 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                startActivity(intent);
-                // animacion para la transicion: primero la de entrada del activity que se abre y luego la de salida del activity actual:
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
+                // Obtengo si hay un usuario con sesion iniciada
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                // Si hay un usuario con sesion iniciada abro la pantalla de Home luego del Splash Screen
+                if(user != null){
+                    Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                } else{     // si no hay una cuenta iniciada abro la pantalla de login luego del Splash Screen
+                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                }
             }
         }, 4000);   // luego de 4 segundos se abre la pantalla de login
     }
