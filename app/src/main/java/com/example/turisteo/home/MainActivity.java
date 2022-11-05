@@ -7,12 +7,19 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.example.turisteo.R;
+import com.example.turisteo.favorites.FavoritesFragment;
+import com.example.turisteo.map.MapFragment;
+import com.example.turisteo.place.PlaceFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Fragments
     HomeFragment homeFragment = new HomeFragment();
     PlaceFragment placeFragment = new PlaceFragment();
     FavoritesFragment favoritesFragment = new FavoritesFragment();
@@ -24,11 +31,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
-        // El siguiente metodo funciona pero esta deprecado, ver si encuentro otro:
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // Al iniciar cargo el fragment de inicio
         loadFragment(homeFragment);
+
+        // -------------------------------------------------------
+
+
     }
 
     // Metodo para detectar que boton se presiona en el bottom navigation y cargar el fragment correspondiente

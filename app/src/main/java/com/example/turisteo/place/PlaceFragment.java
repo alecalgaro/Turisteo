@@ -1,4 +1,4 @@
-package com.example.turisteo.home;
+package com.example.turisteo.place;
 
 import android.os.Bundle;
 

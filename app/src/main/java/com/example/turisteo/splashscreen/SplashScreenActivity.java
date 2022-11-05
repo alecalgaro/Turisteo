@@ -52,7 +52,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 // Si hay un usuario con sesion iniciada abro la pantalla de Home luego del Splash Screen.
                 // Compruebo si se inicio sesion con email y contraseña (user) o si se inicio sesion con gmail (account)
-                if(user != null && account != null){
+                if(user != null || account != null){
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.HomeFragment">
+    tools:context=".home.HomeFragment"
+    android:padding="8dp"
+    android:layout_marginBottom="45dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/lv_places"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Inicio"
-        android:gravity="center"/>
+        android:divider="@null"
+        />
 
 </FrameLayout>
