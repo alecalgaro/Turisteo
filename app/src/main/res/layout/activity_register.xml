@@ -8,8 +8,7 @@
     tools:context=".register.RegisterActivity"
     android:padding="25dp"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="@color/white">
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/imgLogo"

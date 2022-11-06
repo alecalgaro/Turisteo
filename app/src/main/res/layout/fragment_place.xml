@@ -1,15 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".place.PlaceFragment">
+    tools:context=".place.PlaceFragment"
+    android:padding="15dp">
 
-    <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp"
+            android:text="Nombre del lugar"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp"
+            android:text="5.0"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        android:paddingRight="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_rating"
+        app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="320dp"
+                    android:layout_height="200dp"
+                    android:layout_marginEnd="20dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_card_place" />
+
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="320dp"
+                    android:layout_height="200dp"
+                    android:layout_marginEnd="20dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_card_place" />
+
+                <ImageView
+                    android:id="@+id/image3"
+                    android:layout_width="320dp"
+                    android:layout_height="200dp"
+                    android:layout_marginEnd="20dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_card_place" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="Descripción más detallada del lugar"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:paddingBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+    <ImageView
+        android:id="@+id/icon_dir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_dir"
+        android:paddingVertical="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Información del lugar"
-        android:gravity="center"/>
+        android:id="@+id/tv_dir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dirección"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:paddingVertical="12dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@+id/icon_dir"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/icon_tel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_tel"
+        android:paddingVertical="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon_dir" />
+
+    <TextView
+        android:id="@+id/tv_tel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Teléfono"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:paddingVertical="12dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@+id/icon_tel"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dir" />
+
+    <ImageView
+        android:id="@+id/icon_web"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_web"
+        android:paddingVertical="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon_tel" />
+
+    <TextView
+        android:id="@+id/tv_web"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Página web"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:paddingVertical="12dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@+id/icon_web"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tel" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="0"
+            android:stepSize="0.5"
+            app:layout_constraintBottom_toTopOf="@id/btn_map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:text="Ver mapa"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
