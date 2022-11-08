@@ -8,17 +8,13 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
 import com.example.turisteo.R;
 import com.example.turisteo.favorites.FavoritesFragment;
 import com.example.turisteo.map.MapFragment;
 import com.example.turisteo.place.PlaceFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
