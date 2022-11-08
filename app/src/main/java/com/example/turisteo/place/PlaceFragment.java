@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.turisteo.R;
+import com.example.turisteo.database.AdminLocalDB;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,9 @@ import com.example.turisteo.R;
  * create an instance of this fragment.
  */
 public class PlaceFragment extends Fragment {
+
+    ImageView icon_fav;
+    AdminLocalDB adminLocalDB;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,7 +65,25 @@ public class PlaceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Creo una instancia de la BD local
+        adminLocalDB = new AdminLocalDB(getActivity().getApplicationContext(), "favorites_places", null, 1);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_place, container, false);
+        View viewPlace = inflater.inflate(R.layout.fragment_place, container, false);
+
+        icon_fav = viewPlace.findViewById(R.id.icon_fav);
+
+        // Añadir lugar a favoritos
+        icon_fav.setOnClickListener(v -> {
+            icon_fav.setImageResource(R.drawable.ic_fav);
+
+            // Se añade el lugar a la BD local como favorito
+            adminLocalDB.insertFavorite("https://res.cloudinary.com/alecalgaro/image/upload/v1666051944/Portfolio%20-%20Alejandro%20Calgaro/portfolio_ikf9jo.webp", "Nombre del lugar");
+        });
+
+
+
+        return viewPlace;
     }
 }

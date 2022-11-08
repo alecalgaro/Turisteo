@@ -10,8 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.turisteo.R;
-import com.example.turisteo.home.AdapterPlaces;
-import com.example.turisteo.home.Place;
+import com.example.turisteo.database.AdminLocalDB;
 
 import java.util.ArrayList;
 
@@ -26,6 +25,8 @@ public class FavoritesFragment extends Fragment {
     private ListView lv_favorites;
     private AdapterFavorites adapterFavorites;
     //private ArrayList<Favorite> arrayList = new ArrayList<>();
+
+    AdminLocalDB adminLocalDB;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,6 +72,9 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Creo una instancia de la BD local
+        adminLocalDB = new AdminLocalDB(getActivity().getApplicationContext(), "favorites_places", null, 1);
+
         // Inflate the layout for this fragment
         View viewFavorites = inflater.inflate(R.layout.fragment_favorites, container, false);
 
@@ -82,13 +86,12 @@ public class FavoritesFragment extends Fragment {
 
         adapterFavorites = new AdapterFavorites(getContext(), arrayList);
         lv_favorites.setAdapter(adapterFavorites);
+        // Obtengo los favoritos de la BD local (se guardan en el arrayList y se muestran)
+        adminLocalDB.getFavorites(arrayList);
 
-        // Creo y añado al array las películas (las hago acá y no fuera en una función porque tuve que poner el arrayDatos de forma local acá dentro):
-        String title = "Nombre del lugar";
-
-        arrayList.add(new Favorite("1", R.drawable.img_card_place, title));
-        arrayList.add(new Favorite("2", R.drawable.img_card_place, title));
-        arrayList.add(new Favorite("3", R.drawable.img_card_place, title));
+        // Creo y añado al array los favoritos (las hago acá y no fuera en una función porque tuve que poner el arrayDatos de forma local acá dentro):
+        //String title = "Nombre del lugar";
+        //arrayList.add(new Favorite("https://drive.google.com/file/d/19SLmTwbNsJd_GS6vC5wi0g0H_dYXR5J_/view?usp=share_link", title));
 
         return viewFavorites;       // para utilizar ese objeto viewPlaces dentro del activity
     }

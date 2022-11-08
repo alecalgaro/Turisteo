@@ -1,14 +1,19 @@
 package com.example.turisteo.favorites;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.turisteo.R;
+import com.example.turisteo.database.AdminLocalDB;
+import com.example.turisteo.home.MainActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -16,6 +21,8 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
     private ArrayList<Favorite> listFavorites;
     private Context context;                    // para la clase de donde estemos llamando a este adaptador
     private LayoutInflater inflater;
+
+    AdminLocalDB adminLocalDB;
 
     public AdapterFavorites(Context context, ArrayList<Favorite> listFavorites) {
         this.context = context;
@@ -40,6 +47,9 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
     @Override
     public View getView(int position, View view, ViewGroup parent) {
 
+        // Creo una instancia de la BD local
+        adminLocalDB = new AdminLocalDB(context, "favorites_places", null, 1);
+
         // Objeto para cada item (favorito) a mostrar:
         final Favorite favorite = (Favorite) getItem(position);
 
@@ -51,8 +61,25 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
         ImageView icon_delete = view.findViewById(R.id.icon_delete);
 
         // Inicializo:
-        img.setImageResource(favorite.getIdImage());
-        tv_name.setText(favorite.getNombre());
+        //img.setImageResource(favorite.getIdImage());
+        // Uso la libreria "Picasso" para cargar imagenes desde una URL
+        Picasso.get()
+                .load(favorite.getImage())
+                .into(img);
+
+        tv_name.setText(favorite.getName());
+
+        // Eliminar favorito
+        // Elimino aca porque tengo acceso al icon_delete y al favorito que quiero eliminar para acceder a su id
+        icon_delete.setOnClickListener(v -> {
+            adminLocalDB.deleteFavorite(favorite.getId());
+            Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+            // TENGO QUE VER ESTO PORQUE NO PUEDO CERRAR LA PANTALLA. ADEMAS ESTOY ABRIENDO EL MAIN
+            // Y DEBERIA SER COMO REFRESCAR LA MISMA PANTALLA DE FAVORITOS Y CARGAR LOS QUE QUEDARON
+            // SIN EL ELIMINADO RECIEN, PERO NO PUDE HACERLO AUN.
+        });
 
         return view;
     }
