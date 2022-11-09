@@ -4,21 +4,21 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.favorites.FavoritesFragment;
-import com.example.turisteo.map.MapFragment;
-import com.example.turisteo.place.PlaceFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,9 @@ public class HomeFragment extends Fragment {
     // Adapter y ListView
     private ListView lv_places;
     private AdapterPlaces adapterPlaces;
-    //private ArrayList<Place> arrayList = new ArrayList<>();
+
+    // Instancia de la Firestore (base de datos) en Firebase:
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,19 +86,19 @@ public class HomeFragment extends Fragment {
         // El arrayList lo creo aca, de forma local dentro del onCreateView porque si lo pongo de forma global, al seleccionar un lugar
         // y luego volver con el botón hacia atrás, la lista de lugares se vuelve a llenar y se duplican.
         ArrayList<Place> arrayList = new ArrayList<>();
+        arrayList = (ArrayList<Place>)getArguments().getSerializable("arrayListPlaces");
 
         lv_places = (ListView) viewPlaces.findViewById(R.id.lv_places);
 
         adapterPlaces = new AdapterPlaces(getContext(), arrayList);
         lv_places.setAdapter(adapterPlaces);
 
-        // Creo y añado al array las películas (las hago acá y no fuera en una función porque tuve que poner el arrayDatos de forma local acá dentro):
-        String title = "Nombre del lugar";
-        String descripcion = "Descripción breve del lugar";
+        //String title = "Nombre del lugar";
+        //String descripcion = "Descripción breve del lugar";
 
-        arrayList.add(new Place("1", R.drawable.img_card_place, title, descripcion));
-        arrayList.add(new Place("2", R.drawable.img_card_place, title, descripcion));
-        arrayList.add(new Place("3", R.drawable.img_card_place, title, descripcion));
+        //arrayList.add(new Place("1", R.drawable.img_card_place, title, descripcion));
+        //arrayList.add(new Place("2", R.drawable.img_card_place, title, descripcion));
+        //arrayList.add(new Place("3", R.drawable.img_card_place, title, descripcion));
 
         return viewPlaces;       // para utilizar ese objeto viewPlaces dentro del activity
 

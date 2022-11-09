@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Turisteo">
-        <activity android:name=".login.ForgotPasswordActivity"></activity>
+        <activity android:name=".login.ForgotPasswordActivity" />
         <activity android:name=".register.RegisterActivity" />
         <activity android:name=".home.MainActivity" />
         <activity android:name=".login.LoginActivity" />
@@ -21,9 +21,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Para notificaciones con firebase -->
+        </activity> <!-- Para notificaciones con firebase -->
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:exported="false">
@@ -31,7 +29,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

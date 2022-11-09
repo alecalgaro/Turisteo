@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.turisteo.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,10 @@ public class AdapterPlaces extends BaseAdapter {      // recordar que extiende d
         TextView tv_description = view.findViewById(R.id.tv_description);
 
         // Inicializo:
-        img.setImageResource(place.getIdImage());
+        // Uso la libreria "Picasso" para cargar imagenes desde una URL
+        Picasso.get()
+                .load(place.getUrlImage())
+                .into(img);
         tv_name.setText(place.getNombre());
         tv_description.setText(place.getDescription());
 
