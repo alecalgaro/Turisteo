@@ -1,4 +1,4 @@
-package com.example.turisteo.database;
+package com.example.turisteo.database_local;
 
 import android.content.ContentValues;
 import android.content.Context;

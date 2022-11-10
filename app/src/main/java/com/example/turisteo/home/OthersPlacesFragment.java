@@ -1,4 +1,4 @@
-package com.example.turisteo.place;
+package com.example.turisteo.home;
 
 import android.os.Bundle;
 
@@ -7,20 +7,22 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.example.turisteo.R;
-import com.example.turisteo.database_local.AdminLocalDB;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PlaceFragment#newInstance} factory method to
+ * Use the {@link OthersPlacesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlaceFragment extends Fragment {
+public class OthersPlacesFragment extends Fragment {
 
-    ImageView icon_fav;
-    AdminLocalDB adminLocalDB;
+    // Adapter y ListView
+    private ListView lv_places;
+    private AdapterPlaces adapterPlaces;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +33,7 @@ public class PlaceFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public PlaceFragment() {
+    public OthersPlacesFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +43,11 @@ public class PlaceFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment PlaceFragment.
+     * @return A new instance of fragment OthersPlacesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlaceFragment newInstance(String param1, String param2) {
-        PlaceFragment fragment = new PlaceFragment();
+    public static OthersPlacesFragment newInstance(String param1, String param2) {
+        OthersPlacesFragment fragment = new OthersPlacesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,25 +67,19 @@ public class PlaceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Creo una instancia de la BD local
-        adminLocalDB = new AdminLocalDB(getActivity().getApplicationContext(), "favorites_places", null, 1);
-
         // Inflate the layout for this fragment
-        View viewPlace = inflater.inflate(R.layout.fragment_place, container, false);
+        View viewPlaces = inflater.inflate(R.layout.list_places, container, false);
 
-        icon_fav = viewPlace.findViewById(R.id.icon_fav);
+        // El arrayList lo creo aca, de forma local dentro del onCreateView porque si lo pongo de forma global, al seleccionar un lugar
+        // y luego volver con el botón hacia atrás, la lista de lugares se vuelve a llenar y se duplican.
+        ArrayList<Place> arrayList = new ArrayList<>();
+        arrayList = (ArrayList<Place>)getArguments().getSerializable("arrayListOthersPlaces");
 
-        // Añadir lugar a favoritos
-        icon_fav.setOnClickListener(v -> {
-            icon_fav.setImageResource(R.drawable.ic_fav);
+        lv_places = (ListView) viewPlaces.findViewById(R.id.lv_places);
 
-            // Se añade el lugar a la BD local como favorito
-            adminLocalDB.insertFavorite("https://res.cloudinary.com/alecalgaro/image/upload/v1666051944/Portfolio%20-%20Alejandro%20Calgaro/portfolio_ikf9jo.webp", "Nombre del lugar");
-        });
+        adapterPlaces = new AdapterPlaces(getContext(), arrayList);
+        lv_places.setAdapter(adapterPlaces);
 
-
-
-        return viewPlace;
+        return viewPlaces;       // para utilizar ese objeto viewPlaces dentro del activity
     }
 }

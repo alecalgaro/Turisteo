@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.database.AdminLocalDB;
+import com.example.turisteo.database_local.AdminLocalDB;
 import com.example.turisteo.home.MainActivity;
 import com.squareup.picasso.Picasso;
 
@@ -61,7 +61,6 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
         ImageView icon_delete = view.findViewById(R.id.icon_delete);
 
         // Inicializo:
-        //img.setImageResource(favorite.getIdImage());
         // Uso la libreria "Picasso" para cargar imagenes desde una URL
         Picasso.get()
                 .load(favorite.getImage())
@@ -74,8 +73,9 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
         icon_delete.setOnClickListener(v -> {
             adminLocalDB.deleteFavorite(favorite.getId());
             Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(context, MainActivity.class);
-            context.startActivity(intent);
+            //intent.putExtra("goToFavorite", "");
+            //Intent intent = new Intent(context, MainActivity.class);
+            //context.startActivity(intent);
             // TENGO QUE VER ESTO PORQUE NO PUEDO CERRAR LA PANTALLA. ADEMAS ESTOY ABRIENDO EL MAIN
             // Y DEBERIA SER COMO REFRESCAR LA MISMA PANTALLA DE FAVORITOS Y CARGAR LOS QUE QUEDARON
             // SIN EL ELIMINADO RECIEN, PERO NO PUDE HACERLO AUN.

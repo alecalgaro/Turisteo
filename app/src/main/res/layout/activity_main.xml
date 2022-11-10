@@ -28,13 +28,13 @@
             android:id="@+id/tabItem2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comida" />
+            android:text="Playas/termas" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabItem3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Naturaleza" />
+            android:text="Rest/Bar" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabItem4"

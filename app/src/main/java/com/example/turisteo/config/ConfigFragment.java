@@ -44,7 +44,10 @@ public class ConfigFragment extends Fragment {
 
     // Instancia de la Firestore (base de datos) en Firebase:
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ArrayList<Place> arrayList = new ArrayList<>();
+    ArrayList<Place> arrayListHistoricalPlaces = new ArrayList<>();
+    ArrayList<Place> arrayListBeachPlaces = new ArrayList<>();
+    ArrayList<Place> arrayListFoodPlaces = new ArrayList<>();
+    ArrayList<Place> arrayListOthersPlaces = new ArrayList<>();
 
     ProgressBar progressBar;
     TextView tv_progressBar;
@@ -112,22 +115,36 @@ public class ConfigFragment extends Fragment {
 
                 String item = adapterView.getItemAtPosition(position).toString();
 
-                // Leer todos los documentos de la base de datos en Firebase:
+                // Leo todos los documentos de la base de datos en Firebase que correspondan a la coleccion de la ciudad elegida:
                 db.collection("places_chajari")     // si agrego mas ciudades aca debe ir una variable con la ciudad elegida
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    arrayList.clear();      // limpio el array antes de agregar
+                                    arrayListHistoricalPlaces.clear();      // limpio el array antes de agregar
+                                    arrayListBeachPlaces.clear();
+                                    arrayListFoodPlaces.clear();
+                                    arrayListOthersPlaces.clear();
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        //Toast.makeText(MainActivity.this, document.getString("name"), Toast.LENGTH_SHORT).show();
-                                        //Log.d("BD",document.getString("name"));
-                                        arrayList.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                        // Segun la categoria del lugar lo agrego en el array correspondiente
+                                        switch (document.getString("category")){
+                                            case "historical":
+                                                arrayListHistoricalPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                break;
+                                            case "beach":
+                                                arrayListBeachPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                break;
+                                            case "food":
+                                                arrayListFoodPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                break;
+                                            case "others":
+                                                arrayListOthersPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                break;
+                                        }
                                     }
                                     progressBar.setVisibility(View.INVISIBLE);
                                     tv_progressBar.setVisibility(View.INVISIBLE);
-
                                 } else {
                                     Toast.makeText(getContext(), "Error al conectar con la base de datos", Toast.LENGTH_LONG).show();
                                 }
@@ -137,8 +154,11 @@ public class ConfigFragment extends Fragment {
         });
 
         // Accedo al bundle del MainActivity (porque es padre de este fragment y asi se puede acceder a metodos u objetos
-        // del activity padre) y le agrego el putSerializable para enviar los datos al HomeFragment
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListPlaces", arrayList);
+        // del activity padre) y le agrego el putSerializable para enviar todos los array con lugares y en cada Fragment recibo el que corresponde.
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListHistoricalPlaces", arrayListHistoricalPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListBeachPlaces", arrayListBeachPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListFoodPlaces", arrayListFoodPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListOthersPlaces", arrayListOthersPlaces);
         // Luego de hacer click en la ciudad y cargar al arrayList con los lugares, suele demorar unos segundos en recibir la info desde Firebase,
         // entonces le puse un progressBar para indicar que se estan cargando los datos y una vez que estan listos desaparece, asi cuando
         // el usuario vaya al HomeFragment desde el bottom_navigation ya podra ver todos los lugares cargados.

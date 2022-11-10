@@ -8,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.database.AdminLocalDB;
+import com.example.turisteo.database_local.AdminLocalDB;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,6 @@ public class FavoritesFragment extends Fragment {
     // Adapter y ListView
     private ListView lv_favorites;
     private AdapterFavorites adapterFavorites;
-    //private ArrayList<Favorite> arrayList = new ArrayList<>();
 
     AdminLocalDB adminLocalDB;
 
@@ -88,10 +88,6 @@ public class FavoritesFragment extends Fragment {
         lv_favorites.setAdapter(adapterFavorites);
         // Obtengo los favoritos de la BD local (se guardan en el arrayList y se muestran)
         adminLocalDB.getFavorites(arrayList);
-
-        // Creo y añado al array los favoritos (las hago acá y no fuera en una función porque tuve que poner el arrayDatos de forma local acá dentro):
-        //String title = "Nombre del lugar";
-        //arrayList.add(new Favorite("https://drive.google.com/file/d/19SLmTwbNsJd_GS6vC5wi0g0H_dYXR5J_/view?usp=share_link", title));
 
         return viewFavorites;       // para utilizar ese objeto viewPlaces dentro del activity
     }

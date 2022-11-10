@@ -28,22 +28,26 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Fragments
-    HomeFragment homeFragment = new HomeFragment();
+    // Fragments del bottom_navigation
     PlaceFragment placeFragment = new PlaceFragment();
     FavoritesFragment favoritesFragment = new FavoritesFragment();
     MapFragment mapFragment = new MapFragment();
     ConfigFragment configFragment = new ConfigFragment();
 
-    // TabLayout para el menu superior usado en la pantalla principal
-    TabLayout tabLayout;
+    // Fragments del menu de navegacion superior en el Home, para filtrar por categoria de lugar
+    HistoricalPlacesFragment historicalPlacesFragment = new HistoricalPlacesFragment();
+    BeachPlacesFragment beachPlacesFragment = new BeachPlacesFragment();
+    FoodPlacesFragment foodPlacesFragment = new FoodPlacesFragment();
+    OthersPlacesFragment othersPlacesFragment = new OthersPlacesFragment();
 
     // BottomNavigation para el menu inferior
     BottomNavigationView navigation;
 
-    // Instancia de la Firestore (base de datos) en Firebase:
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    public ArrayList<Place> arrayList = new ArrayList<>();
+    // TabLayout para el menu superior usado en la pantalla principal
+    TabLayout tabLayout;
+
+    // Bundle para pasar la informacion de los array a los fragments de categoria de lugares.
+    // Esos array se llenan en ConfigFragment luego de hacer la consulta a la BD de Firebase y se pasar ahi mismo en este bundle.
     public Bundle bundle = new Bundle();
 
     @Override
@@ -55,25 +59,32 @@ public class MainActivity extends AppCompatActivity {
         navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // Al iniciar cargo el fragment de inicio
-        loadFragment(configFragment);
+        // Al iniciar cargo el configFragment
+        String goToFavorite = getIntent().getStringExtra("goToFavorite");   // esto lo puse para probar ir al favoritesFragment cuando elimino
+        if(goToFavorite != null){                                                 // uno y asi tener la lista actualizada pero no sirve porque es como
+            loadFragment(favoritesFragment);                                      // reiniciar y ya no aparen los datos de lugares en inicio
+        }else{
+            loadFragment(configFragment);
+        }
 
-        // TabLayout: barra de navegacion superior para mostrar lugares por tipo (lugares historicos, restaurantes, etc.)
+        // TabLayout: menu de navegacion superior para mostrar lugares por tipo (lugares historicos, restaurantes, etc.)
+        // Lo uso en MainActivity y no en HomeFragment porque debo ir reemplazando el fragment y sino perdería esta barra de navegacion
+        // o la deberia poner en todos los fragments que la usen y seria repetir codigo innecesario.
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()) {
                     case 0:
-                        loadFragment(homeFragment);     // debo crear un fragment para cada tipo de lugar y usarlos aca
+                        loadFragment(historicalPlacesFragment);
                         break;
                     case 1:
-                        loadFragment(placeFragment);
+                        loadFragment(beachPlacesFragment);
                         break;
                     case 2:
-                        loadFragment(favoritesFragment);
+                        loadFragment(foodPlacesFragment);
                         break;
                     case 3:
-                        loadFragment(mapFragment);
+                        loadFragment(othersPlacesFragment);
                         break;
                 }
             }
@@ -97,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     tabLayout.setVisibility(View.GONE);
                     return true;
                 case R.id.homeFragment:
-                    loadFragment(homeFragment);
+                    loadFragment(historicalPlacesFragment);
                     tabLayout.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.placeFragment:
