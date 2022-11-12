@@ -5,7 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".place.PlaceInfoFragment"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:translationZ="1dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/warning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:translationZ="1dp"
+        android:visibility="visible"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Debes presionar sobre un lugar\npara obtener su información"
+            android:textSize="18sp"
+            android:gravity="center"
+            />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -171,6 +190,7 @@
                 android:text="Página web"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+                android:clickable="true"
                 app:layout_constraintStart_toEndOf="@+id/icon_web"
                 app:layout_constraintTop_toBottomOf="@+id/tv_phone" />
 

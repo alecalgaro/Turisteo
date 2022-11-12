@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.turisteo.R;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,8 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class OthersPlacesFragment extends Fragment {
+
+    TextView tv_warning;
 
     // Adapter y ListView
     private ListView lv_places;
@@ -76,30 +80,39 @@ public class OthersPlacesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        setTabActive();
+
         // Inflate the layout for this fragment
         View viewPlaces = inflater.inflate(R.layout.list_places, container, false);
+
+        tv_warning = viewPlaces.findViewById(R.id.tv_warning);
 
         // El arrayList lo creo aca, de forma local dentro del onCreateView porque si lo pongo de forma global, al seleccionar un lugar
         // y luego volver con el botón hacia atrás, la lista de lugares se vuelve a llenar y se duplican.
         ArrayList<Place> arrayList = new ArrayList<>();
         arrayList = (ArrayList<Place>)getArguments().getSerializable("arrayListOthersPlaces");
 
-        lv_places = (ListView) viewPlaces.findViewById(R.id.lv_places);
+        if(arrayList != null){
+            tv_warning.setVisibility(View.GONE);
 
-        adapterPlaces = new AdapterPlaces(getContext(), arrayList);
-        lv_places.setAdapter(adapterPlaces);
+            lv_places = (ListView) viewPlaces.findViewById(R.id.lv_places);
 
-        // Si se presiona sobre la card de un lugar abro su descripción en otro fragment:
-        ArrayList<Place> finalArrayList = arrayList;
-        lv_places.setOnItemClickListener(new AdapterView.OnItemClickListener() {    // Recordar que es setOnItemClick... no setOnClick...
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
-                interfaceComunicacionFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
-                // Oculto la barra de navegacion superior al pasar al PlaceInfoFragment
-                hideTabLayout();
-            }
-        });
+            adapterPlaces = new AdapterPlaces(getContext(), arrayList);
+            lv_places.setAdapter(adapterPlaces);
+
+            // Si se presiona sobre la card de un lugar abro su descripción en otro fragment:
+            ArrayList<Place> finalArrayList = arrayList;
+            lv_places.setOnItemClickListener(new AdapterView.OnItemClickListener() {    // Recordar que es setOnItemClick... no setOnClick...
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
+                    interfaceComunicacionFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
+                    // Oculto la barra de navegacion superior al pasar al PlaceInfoFragment
+                    hideTabLayout();
+                }
+            });
+        }
 
         return viewPlaces;       // para utilizar ese objeto viewPlaces dentro del activity
     }
@@ -114,6 +127,12 @@ public class OthersPlacesFragment extends Fragment {
             this.activity = (Activity) context;
             interfaceComunicacionFragments = (IComunicacionFragments) this.activity;
         }
+    }
+
+    // Activo el tab correspondiente en el menu superior (porque al ir a otra pantalla y volver necesito activar el que corresponde)
+    public void setTabActive(){
+        TabLayout tabLayout = ((MainActivity)this.getActivity()).tabLayout;
+        tabLayout.selectTab(tabLayout.getTabAt(3));
     }
 
     @SuppressLint("RestrictedApi")

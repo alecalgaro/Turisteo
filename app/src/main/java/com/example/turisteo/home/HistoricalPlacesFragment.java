@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.turisteo.R;
 import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,8 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class HistoricalPlacesFragment extends Fragment {
+
+    TextView tv_warning;
 
     // Adapter y ListView
     private ListView lv_places;
@@ -80,31 +84,36 @@ public class HistoricalPlacesFragment extends Fragment {
         // Inflate the layout for this fragment
         View viewPlaces = inflater.inflate(R.layout.list_places, container, false);
 
-        // Seteo cual es el item del bottom_navigation que debe estar activo
-        setChekedBottomItem();
-        //setTabActive();
+        tv_warning = viewPlaces.findViewById(R.id.tv_warning);
 
         // El arrayList lo creo aca, de forma local dentro del onCreateView porque si lo pongo de forma global, al seleccionar un lugar
         // y luego volver con el botón hacia atrás, la lista de lugares se vuelve a llenar y se duplican.
         ArrayList<Place> arrayList = new ArrayList<>();
         arrayList = (ArrayList<Place>)getArguments().getSerializable("arrayListHistoricalPlaces");
 
-        lv_places = (ListView) viewPlaces.findViewById(R.id.lv_places);
+        // Si hay informacion para mostrar, quito el tv_warning y muestro el listado
+        if(arrayList != null){
+            tv_warning.setVisibility(View.GONE);
 
-        adapterPlaces = new AdapterPlaces(getContext(), arrayList);
-        lv_places.setAdapter(adapterPlaces);
+            // Seteo el item del bottom_navigation y el tab del menu superior que deben estar activos
+            setChekedBottomItem();
+            setTabActive();
 
-        // Si se presiona sobre la card de un lugar abro su descripción en otro fragment:
-        ArrayList<Place> finalArrayList = arrayList;
-        lv_places.setOnItemClickListener(new AdapterView.OnItemClickListener() {    // Recordar que es setOnItemClick... no setOnClick...
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
-                interfaceComunicacionFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
-                // Oculto la barra de navegacion superior al pasar al PlaceInfoFragment
-                hideTabLayout();
-            }
-        });
+            lv_places = (ListView) viewPlaces.findViewById(R.id.lv_places);
+
+            adapterPlaces = new AdapterPlaces(getContext(), arrayList);
+            lv_places.setAdapter(adapterPlaces);
+
+            // Si se presiona sobre la card de un lugar abro su descripción en otro fragment:
+            ArrayList<Place> finalArrayList = arrayList;
+            lv_places.setOnItemClickListener(new AdapterView.OnItemClickListener() {    // Recordar que es setOnItemClick... no setOnClick...
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
+                    interfaceComunicacionFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
+                }
+            });
+        }
 
         return viewPlaces;       // para utilizar ese objeto viewPlaces dentro del activity
     }
@@ -121,8 +130,11 @@ public class HistoricalPlacesFragment extends Fragment {
         }
     }
 
+    // Activo el item correspondiente en el bottom_navigation
     @SuppressLint("RestrictedApi")
     public void setChekedBottomItem() {
+        // Existe ((MainActivity)this.getActivity()).navigation.setSelectedItemId(R.id.bottom_item_home);
+        // que queda mucho mejor con esa sola linea pero es como simular que se presiona el boton y algunas veces me da problema
         ((MainActivity)this.getActivity()).bottom_item_config.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_home.setChecked(true);
         ((MainActivity)this.getActivity()).bottom_item_place.setChecked(false);
@@ -130,15 +142,10 @@ public class HistoricalPlacesFragment extends Fragment {
         ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
 
-    /*public void setTabActive(){
-        ((MainActivity)this.getActivity()).tabItem1.setPressed(true);
-        ((MainActivity)this.getActivity()).tabItem2.setPressed(false);
-        ((MainActivity)this.getActivity()).tabItem3.setPressed(false);
-        ((MainActivity)this.getActivity()).tabItem4.setPressed(false);
-    }*/
-
-    @SuppressLint("RestrictedApi")
-    public void hideTabLayout(){
-        ((MainActivity)this.getActivity()).tabLayout.setVisibility(View.GONE);
+    // Activo el tab correspondiente en el menu superior (porque al ir a otra pantalla y volver necesito activar el que corresponde)
+    public void setTabActive(){
+        TabLayout tabLayout = ((MainActivity)this.getActivity()).tabLayout;
+        tabLayout.selectTab(tabLayout.getTabAt(0));
     }
+
 }

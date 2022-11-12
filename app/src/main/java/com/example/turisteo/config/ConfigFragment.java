@@ -1,6 +1,7 @@
 package com.example.turisteo.config;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.turisteo.R;
+import com.example.turisteo.home.HistoricalPlacesFragment;
 import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.home.Place;
 import com.example.turisteo.login.LoginActivity;
@@ -181,6 +183,7 @@ public class ConfigFragment extends Fragment {
                                     }
                                     progressBar.setVisibility(View.INVISIBLE);
                                     tv_progressBar.setVisibility(View.INVISIBLE);
+                                    loadData();
                                 } else {
                                     Toast.makeText(getContext(), "Error al conectar con la base de datos", Toast.LENGTH_LONG).show();
                                 }
@@ -188,16 +191,6 @@ public class ConfigFragment extends Fragment {
                         });
             }
         });
-
-        // Accedo al bundle del MainActivity (porque es padre de este fragment y asi se puede acceder a metodos u objetos
-        // del activity padre) y le agrego el putSerializable para enviar todos los array con lugares y en cada Fragment recibo el que corresponde.
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListHistoricalPlaces", arrayListHistoricalPlaces);
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListBeachPlaces", arrayListBeachPlaces);
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListFoodPlaces", arrayListFoodPlaces);
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListOthersPlaces", arrayListOthersPlaces);
-        // Luego de hacer click en la ciudad y cargar al arrayList con los lugares, suele demorar unos segundos en recibir la info desde Firebase,
-        // entonces le puse un progressBar para indicar que se estan cargando los datos y una vez que estan listos desaparece, asi cuando
-        // el usuario vaya al HomeFragment desde el bottom_navigation ya podra ver todos los lugares cargados.
 
         // Boton para cerrar sesion
         btn_logout.setOnClickListener(v -> {
@@ -208,6 +201,21 @@ public class ConfigFragment extends Fragment {
         });
 
         return viewConfig;
+    }
+
+    // Accedo al bundle del MainActivity (porque es padre de este fragment y asi se puede acceder a metodos u objetos
+    // del activity padre) y le agrego el putSerializable para enviar todos los array con lugares y en cada Fragment recibo el que corresponde.
+    public void loadData(){
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListHistoricalPlaces", arrayListHistoricalPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListBeachPlaces", arrayListBeachPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListFoodPlaces", arrayListFoodPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListOthersPlaces", arrayListOthersPlaces);
+        HistoricalPlacesFragment historicalPlacesFragment = new HistoricalPlacesFragment();
+        ((MainActivity)this.getActivity()).loadFragment(historicalPlacesFragment);
+        ((MainActivity)this.getActivity()).tabLayout.setVisibility(View.VISIBLE);
+        // Luego de hacer click en la ciudad y cargar al arrayList con los lugares, suele demorar unos segundos en recibir la info desde Firebase,
+        // entonces le puse un progressBar para indicar que se estan cargando los datos y una vez que estan listos desaparece, asi cuando
+        // el usuario vaya al HomeFragment desde el bottom_navigation ya podra ver todos los lugares cargados.
     }
 
     @SuppressLint("RestrictedApi")

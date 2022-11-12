@@ -1,15 +1,19 @@
 package com.example.turisteo.place;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +30,8 @@ import com.squareup.picasso.Picasso;
  * create an instance of this fragment.
  */
 public class PlaceInfoFragment extends Fragment {
+
+    LinearLayout warning;
 
     AdminLocalDB adminLocalDB;
 
@@ -87,7 +93,9 @@ public class PlaceInfoFragment extends Fragment {
         adminLocalDB = new AdminLocalDB(getActivity().getApplicationContext(), "favorites_places", null, 1);
 
         // Inflate the layout for this fragment
-        View viewPlace = inflater.inflate(R.layout.fragment_place, container, false);
+        View viewPlace = inflater.inflate(R.layout.fragment_place_info, container, false);
+
+        warning = viewPlace.findViewById(R.id.warning);
 
         tv_title = viewPlace.findViewById(R.id.tv_title);
         tv_rating = viewPlace.findViewById(R.id.tv_rating);
@@ -107,21 +115,35 @@ public class PlaceInfoFragment extends Fragment {
 
         if(placeReceived != null) {   // quiere decir que tenemos argumentos para mostrar
             place = (Place) placeReceived.getSerializable("place");    // lo envie desde MainActivity con el key "place"
-            loadInfo(place);
+
+            if(place != null){      // si se recibio informacion con la clave "place"
+                warning.setVisibility(View.GONE);
+                loadInfo(place);
+
+                // Añadir lugar a favoritos
+                Place finalPlace = place;   // al usar la linea para insertar en la BD me pide agregar esto
+                btn_addFavorite.setOnClickListener(v -> {
+                    // Se añade el lugar a la BD local como favorito
+                    adminLocalDB.insertFavorite(finalPlace.getUrlImage1(), finalPlace.getName());
+                    Toast.makeText(getContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
+                });
+
+                // Intent para abrir pagina web del lugar al presionar sobre el TextView
+                Place finalPlace1 = place;
+                tv_web.setOnClickListener(v -> {
+                    if(!finalPlace1.getWeb().equals("-")){      // debe ser una url valida (con http://... o https://...)
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(finalPlace1.getWeb()));
+                        startActivity(intent);
+                    }
+                });
+
+                // Boton para ver el mapa
+                //btn_map.setOnClickListener(v -> {
+
+                //});
+            }
         }
-
-        // Añadir lugar a favoritos
-        btn_addFavorite.setOnClickListener(v -> {
-            // Se añade el lugar a la BD local como favorito
-            adminLocalDB.insertFavorite("https://res.cloudinary.com/alecalgaro/image/upload/v1666051944/Portfolio%20-%20Alejandro%20Calgaro/portfolio_ikf9jo.webp", "Nombre del lugar");
-            Toast.makeText(getContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
-        });
-
-        // Boton para ver el mapa
-        //btn_map.setOnClickListener(v -> {
-
-        //});
-
         return viewPlace;
     }
 
@@ -149,5 +171,4 @@ public class PlaceInfoFragment extends Fragment {
         ((MainActivity)this.getActivity()).bottom_item_favorites.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
-
 }

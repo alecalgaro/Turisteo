@@ -9,6 +9,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.turisteo.R;
 import com.example.turisteo.config.ConfigFragment;
@@ -17,10 +19,11 @@ import com.example.turisteo.map.MapFragment;
 import com.example.turisteo.place.PlaceInfoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity implements IComunicacionFragments {
+
+    FrameLayout frameContainer;
 
     // Fragments del bottom_navigation
     PlaceInfoFragment placeInfoFragment = new PlaceInfoFragment();
@@ -35,12 +38,11 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
     OthersPlacesFragment othersPlacesFragment = new OthersPlacesFragment();
 
     // BottomNavigation para el menu inferior
-    BottomNavigationView navigation;
+    public BottomNavigationView navigation;
     public BottomNavigationItemView bottom_item_config, bottom_item_home, bottom_item_place, bottom_item_favorites, bottom_item_map;
 
     // TabLayout para el menu superior usado en la pantalla principal
-    TabLayout tabLayout;
-    public TabItem tabItem1, tabItem2, tabItem3, tabItem4;
+    public TabLayout tabLayout;
 
     // Bundle para pasar la informacion de los array a los fragments de categoria de lugares.
     // Esos array se llenan en ConfigFragment luego de hacer la consulta a la BD de Firebase y se pasar ahi mismo en este bundle.
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        frameContainer = findViewById(R.id.frame_container);
         tabLayout = findViewById(R.id.tabLayout);
         navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -60,10 +63,6 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
         bottom_item_place = findViewById(R.id.placeFragment);
         bottom_item_favorites = findViewById(R.id.favoritesFragment);
         bottom_item_map = findViewById(R.id.mapFragment);
-        tabItem1 = findViewById(R.id.tabItem1);
-        tabItem2 = findViewById(R.id.tabItem2);
-        tabItem3 = findViewById(R.id.tabItem3);
-        tabItem4 = findViewById(R.id.tabItem4);
 
         // Al iniciar cargo el configFragment
         String goToFavorite = getIntent().getStringExtra("goToFavorite");   // esto lo puse para probar ir al favoritesFragment cuando elimino
@@ -136,8 +135,6 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
 
     // Metodo que reemplaza el fragment correspondiente en el FrameLayout (de id "frame_container") definido en el xml
     public void loadFragment(Fragment fragment){
-        // al carga los fragment de tipos de lugares deberia recibir el array completo y filtrarlos por tipo para mostrar los que corresponden
-        // para eso deberia agregar un campo en Firebase que sea "type" para cada lugar.
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
@@ -157,7 +154,22 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
 
         // Cargamos el fragment en el activity:     (recordar usar replace y no add, porque sino aparece en la misma pantalla que el listado de lugares)
         // El addToBackStack(null) es porque si no lo tiene, al presionar la flecha hacia atrás se cerraba la app
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, placeInfoFragment)
+        getSupportFragmentManager().beginTransaction().add(R.id.frame_container, placeInfoFragment)
                 .addToBackStack(null).commit();
+    }
+
+    // Sobreescribo el metodo de presionar el boton hacia atras para que me seleccione como activo el botton de home en el bottom_navigation.
+    // Lo hice porque al mostrar la info de un lugar uso un add (sendPlace) para que se puede volver hacia atras y el scroll en el listado
+    // de lugares parmanezca en el mismo lugar donde estaba para que sea mejor la experiencia de usuario.
+    // Si necesito que el boton de volver hacia atras funcione en otros fragment deberia ver como hago.
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onBackPressed() {
+        bottom_item_config.setChecked(false);
+        bottom_item_home.setChecked(true);
+        bottom_item_place.setChecked(false);
+        bottom_item_favorites.setChecked(false);
+        bottom_item_map.setChecked(false);
+        super.onBackPressed();
     }
 }
