@@ -1,5 +1,6 @@
 package com.example.turisteo.favorites;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.turisteo.R;
 import com.example.turisteo.database_local.AdminLocalDB;
+import com.example.turisteo.home.MainActivity;
 
 import java.util.ArrayList;
 
@@ -72,6 +74,9 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Seteo cual es el item del bottom_navigation que debe estar activo
+        setChekedBottomItem();
+
         // Creo una instancia de la BD local
         adminLocalDB = new AdminLocalDB(getActivity().getApplicationContext(), "favorites_places", null, 1);
 
@@ -90,5 +95,14 @@ public class FavoritesFragment extends Fragment {
         adminLocalDB.getFavorites(arrayList);
 
         return viewFavorites;       // para utilizar ese objeto viewPlaces dentro del activity
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void setChekedBottomItem() {
+        ((MainActivity)this.getActivity()).bottom_item_config.setChecked(false);
+        ((MainActivity)this.getActivity()).bottom_item_home.setChecked(false);
+        ((MainActivity)this.getActivity()).bottom_item_place.setChecked(false);
+        ((MainActivity)this.getActivity()).bottom_item_favorites.setChecked(true);
+        ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
 }

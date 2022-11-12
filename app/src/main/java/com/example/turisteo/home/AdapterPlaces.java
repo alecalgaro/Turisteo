@@ -54,10 +54,10 @@ public class AdapterPlaces extends BaseAdapter {      // recordar que extiende d
         // Inicializo:
         // Uso la libreria "Picasso" para cargar imagenes desde una URL
         Picasso.get()
-                .load(place.getUrlImage())
+                .load(place.getUrlImage1())
                 .into(img);
-        tv_name.setText(place.getNombre());
-        tv_description.setText(place.getDescription());
+        tv_name.setText(place.getName());
+        tv_description.setText(place.getDescription_short());
 
         return view;
     }

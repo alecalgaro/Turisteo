@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".place.PlaceFragment"
+    tools:context=".place.PlaceInfoFragment"
     android:padding="15dp">
 
     <ScrollView
@@ -98,17 +98,6 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <ImageView
-                android:id="@+id/icon_fav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fav_border"
-                android:clickable="true"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/horizontalScrollView"
-                app:layout_constraintEnd_toEndOf="@+id/horizontalScrollView" />
-
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
@@ -144,7 +133,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
             <ImageView
-                android:id="@+id/icon_tel"
+                android:id="@+id/icon_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
@@ -153,7 +142,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/icon_dir" />
 
             <TextView
-                android:id="@+id/tv_tel"
+                android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -161,7 +150,7 @@
                 android:text="Teléfono"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@+id/icon_tel"
+                app:layout_constraintStart_toEndOf="@+id/icon_phone"
                 app:layout_constraintTop_toBottomOf="@+id/tv_dir" />
 
             <ImageView
@@ -171,7 +160,7 @@
                 android:paddingVertical="12dp"
                 android:src="@drawable/ic_web"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_tel" />
+                app:layout_constraintTop_toBottomOf="@+id/icon_phone" />
 
             <TextView
                 android:id="@+id/tv_web"
@@ -183,7 +172,7 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/icon_web"
-                app:layout_constraintTop_toBottomOf="@+id/tv_tel" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_phone" />
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -204,10 +193,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:text="Ver mapa"
+                app:layout_constraintBottom_toTopOf="@id/btn_addFavorite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+            <Button
+                android:id="@+id/btn_addFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:text="Añadir a favoritos"
+                android:drawableLeft="@drawable/ic_favorite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_map" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

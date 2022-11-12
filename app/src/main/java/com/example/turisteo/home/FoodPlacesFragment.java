@@ -1,5 +1,8 @@
 package com.example.turisteo.home;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.turisteo.R;
@@ -23,6 +27,11 @@ public class FoodPlacesFragment extends Fragment {
     // Adapter y ListView
     private ListView lv_places;
     private AdapterPlaces adapterPlaces;
+
+    // Activity que nos permite tener el contexto de nuestra aplicación:
+    Activity activity;
+    // Referencia a la interfaz que permite la comunicacion entre los dos fragments:
+    IComunicacionFragments interfaceComunicacionFragments;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,6 +89,35 @@ public class FoodPlacesFragment extends Fragment {
         adapterPlaces = new AdapterPlaces(getContext(), arrayList);
         lv_places.setAdapter(adapterPlaces);
 
+        // Si se presiona sobre la card de un lugar abro su descripción en otro fragment:
+        ArrayList<Place> finalArrayList = arrayList;
+        lv_places.setOnItemClickListener(new AdapterView.OnItemClickListener() {    // Recordar que es setOnItemClick... no setOnClick...
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
+                interfaceComunicacionFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
+                // Oculto la barra de navegacion superior al pasar al PlaceInfoFragment
+                hideTabLayout();
+            }
+        });
+
         return viewPlaces;       // para utilizar ese objeto viewPlaces dentro del activity
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // Esto es necesario para establecer la conexión entre la lista de peliculas y la información de pelicula
+
+        // Si el contexto que le esta llegando es una instancia de una activity:
+        if (context instanceof Activity) {
+            this.activity = (Activity) context;
+            interfaceComunicacionFragments = (IComunicacionFragments) this.activity;
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void hideTabLayout(){
+        ((MainActivity)this.getActivity()).tabLayout.setVisibility(View.GONE);
     }
 }

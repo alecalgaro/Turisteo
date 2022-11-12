@@ -1,5 +1,6 @@
 package com.example.turisteo.config;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -38,7 +39,8 @@ import java.util.ArrayList;
 public class ConfigFragment extends Fragment {
 
     // Select de ciudades:
-    String[] items = {"Chajari, Entre Ríos", "Santa Fe, Santa Fe", "Cordoba, Cordoba"};
+    String[] items = {"Chajari, Entre Ríos"};
+    //String[] items = {"Chajari, Entre Ríos", "Santa Fe, Santa Fe", "Cordoba, Cordoba"};
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterItems;
 
@@ -96,6 +98,10 @@ public class ConfigFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Seteo cual es el item del bottom_navigation que debe estar activo
+        setChekedBottomItem();
+
         // Inflate the layout for this fragment
         View viewConfig = inflater.inflate(R.layout.fragment_config, container, false);
 
@@ -113,8 +119,6 @@ public class ConfigFragment extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
                 tv_progressBar.setVisibility(View.VISIBLE);
 
-                String item = adapterView.getItemAtPosition(position).toString();
-
                 // Leo todos los documentos de la base de datos en Firebase que correspondan a la coleccion de la ciudad elegida:
                 db.collection("places_chajari")     // si agrego mas ciudades aca debe ir una variable con la ciudad elegida
                         .get()
@@ -130,16 +134,48 @@ public class ConfigFragment extends Fragment {
                                         // Segun la categoria del lugar lo agrego en el array correspondiente
                                         switch (document.getString("category")){
                                             case "historical":
-                                                arrayListHistoricalPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                arrayListHistoricalPlaces.add(
+                                                        new Place(document.getId(), document.getString("category"),
+                                                                document.getString("name"), document.getString("description_short"),
+                                                                document.getString("description_long"), document.getString("url_image1"),
+                                                                document.getString("url_image2"), document.getString("url_image3"),
+                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
+                                                                document.getString("latitude"), document.getString("longitude"),
+                                                                document.getString("stars"), document.getString("number_reviews")
+                                                                ));
                                                 break;
                                             case "beach":
-                                                arrayListBeachPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                arrayListBeachPlaces.add(
+                                                        new Place(document.getId(), document.getString("category"),
+                                                                document.getString("name"), document.getString("description_short"),
+                                                                document.getString("description_long"), document.getString("url_image1"),
+                                                                document.getString("url_image2"), document.getString("url_image3"),
+                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
+                                                                document.getString("latitude"), document.getString("longitude"),
+                                                                document.getString("stars"), document.getString("number_reviews")
+                                                        ));
                                                 break;
                                             case "food":
-                                                arrayListFoodPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                arrayListFoodPlaces.add(
+                                                        new Place(document.getId(), document.getString("category"),
+                                                                document.getString("name"), document.getString("description_short"),
+                                                                document.getString("description_long"), document.getString("url_image1"),
+                                                                document.getString("url_image2"), document.getString("url_image3"),
+                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
+                                                                document.getString("latitude"), document.getString("longitude"),
+                                                                document.getString("stars"), document.getString("number_reviews")
+                                                        ));
                                                 break;
                                             case "others":
-                                                arrayListOthersPlaces.add(new Place(document.getId(), document.getString("image_1"), document.getString("name"), document.getString("description_short")));
+                                                arrayListOthersPlaces.add(
+                                                        new Place(document.getId(), document.getString("category"),
+                                                                document.getString("name"), document.getString("description_short"),
+                                                                document.getString("description_long"), document.getString("url_image1"),
+                                                                document.getString("url_image2"), document.getString("url_image3"),
+                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
+                                                                document.getString("latitude"), document.getString("longitude"),
+                                                                document.getString("stars"), document.getString("number_reviews")
+                                                        ));
                                                 break;
                                         }
                                     }
@@ -172,6 +208,15 @@ public class ConfigFragment extends Fragment {
         });
 
         return viewConfig;
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void setChekedBottomItem() {
+        ((MainActivity)this.getActivity()).bottom_item_config.setChecked(true);
+        ((MainActivity)this.getActivity()).bottom_item_home.setChecked(false);
+        ((MainActivity)this.getActivity()).bottom_item_place.setChecked(false);
+        ((MainActivity)this.getActivity()).bottom_item_favorites.setChecked(false);
+        ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
 
 }
