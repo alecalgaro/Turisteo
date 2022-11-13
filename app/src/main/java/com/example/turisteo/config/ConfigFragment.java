@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.turisteo.R;
+import com.example.turisteo.firebase.DBFirestore;
 import com.example.turisteo.home.HistoricalPlacesFragment;
 import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.home.Place;
@@ -46,12 +48,8 @@ public class ConfigFragment extends Fragment {
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterItems;
 
-    // Instancia de la Firestore (base de datos) en Firebase:
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ArrayList<Place> arrayListHistoricalPlaces = new ArrayList<>();
-    ArrayList<Place> arrayListBeachPlaces = new ArrayList<>();
-    ArrayList<Place> arrayListFoodPlaces = new ArrayList<>();
-    ArrayList<Place> arrayListOthersPlaces = new ArrayList<>();
+    DBFirestore dbFirestore = new DBFirestore();
+    String path;
 
     ProgressBar progressBar;
     TextView tv_progressBar;
@@ -115,80 +113,34 @@ public class ConfigFragment extends Fragment {
         adapterItems = new ArrayAdapter<String>(getContext(), R.layout.item_select_city, items);
         autoCompleteTextView.setAdapter(adapterItems);
 
+        // Click sobre una ciudad de la lista
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 progressBar.setVisibility(View.VISIBLE);
                 tv_progressBar.setVisibility(View.VISIBLE);
 
-                // Leo todos los documentos de la base de datos en Firebase que correspondan a la coleccion de la ciudad elegida:
-                db.collection("places_chajari")     // si agrego mas ciudades aca debe ir una variable con la ciudad elegida
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    arrayListHistoricalPlaces.clear();      // limpio el array antes de agregar
-                                    arrayListBeachPlaces.clear();
-                                    arrayListFoodPlaces.clear();
-                                    arrayListOthersPlaces.clear();
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        // Segun la categoria del lugar lo agrego en el array correspondiente
-                                        switch (document.getString("category")){
-                                            case "historical":
-                                                arrayListHistoricalPlaces.add(
-                                                        new Place(document.getId(), document.getString("category"),
-                                                                document.getString("name"), document.getString("description_short"),
-                                                                document.getString("description_long"), document.getString("url_image1"),
-                                                                document.getString("url_image2"), document.getString("url_image3"),
-                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
-                                                                document.getString("latitude"), document.getString("longitude"),
-                                                                document.getString("stars"), document.getString("number_reviews")
-                                                                ));
-                                                break;
-                                            case "beach":
-                                                arrayListBeachPlaces.add(
-                                                        new Place(document.getId(), document.getString("category"),
-                                                                document.getString("name"), document.getString("description_short"),
-                                                                document.getString("description_long"), document.getString("url_image1"),
-                                                                document.getString("url_image2"), document.getString("url_image3"),
-                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
-                                                                document.getString("latitude"), document.getString("longitude"),
-                                                                document.getString("stars"), document.getString("number_reviews")
-                                                        ));
-                                                break;
-                                            case "food":
-                                                arrayListFoodPlaces.add(
-                                                        new Place(document.getId(), document.getString("category"),
-                                                                document.getString("name"), document.getString("description_short"),
-                                                                document.getString("description_long"), document.getString("url_image1"),
-                                                                document.getString("url_image2"), document.getString("url_image3"),
-                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
-                                                                document.getString("latitude"), document.getString("longitude"),
-                                                                document.getString("stars"), document.getString("number_reviews")
-                                                        ));
-                                                break;
-                                            case "others":
-                                                arrayListOthersPlaces.add(
-                                                        new Place(document.getId(), document.getString("category"),
-                                                                document.getString("name"), document.getString("description_short"),
-                                                                document.getString("description_long"), document.getString("url_image1"),
-                                                                document.getString("url_image2"), document.getString("url_image3"),
-                                                                document.getString("direction"), document.getString("phone"), document.getString("web"),
-                                                                document.getString("latitude"), document.getString("longitude"),
-                                                                document.getString("stars"), document.getString("number_reviews")
-                                                        ));
-                                                break;
-                                        }
-                                    }
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    tv_progressBar.setVisibility(View.INVISIBLE);
-                                    loadData();
-                                } else {
-                                    Toast.makeText(getContext(), "Error al conectar con la base de datos", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                switch (position){
+                    case 0: path = "places_chajari"; break;
+                    // si se agregan mas ciudades en el listado se irian actualizando los casos aca para pasar el path
+                    // correspondiente para la consulta a la BD
+                }
+                dbFirestore.getDataFirestore(path);     // hago la consulta a la base de datos
+
+                // Espero cuatro segundos para que se realice la consulta y cargo los datos
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(dbFirestore.result == true){     // si la consulta fue existosa
+                            progressBar.setVisibility(View.INVISIBLE);
+                            tv_progressBar.setVisibility(View.INVISIBLE);
+                            loadData();
+                        }else{
+                            progressBar.setVisibility(View.INVISIBLE);
+                            tv_progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getContext(), "Error al conectar con la base de datos. Intente nuevamente.", Toast.LENGTH_LONG).show();
+                        }
+                    }}, 4000);
             }
         });
 
@@ -206,10 +158,10 @@ public class ConfigFragment extends Fragment {
     // Accedo al bundle del MainActivity (porque es padre de este fragment y asi se puede acceder a metodos u objetos
     // del activity padre) y le agrego el putSerializable para enviar todos los array con lugares y en cada Fragment recibo el que corresponde.
     public void loadData(){
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListHistoricalPlaces", arrayListHistoricalPlaces);
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListBeachPlaces", arrayListBeachPlaces);
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListFoodPlaces", arrayListFoodPlaces);
-        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListOthersPlaces", arrayListOthersPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListHistoricalPlaces", dbFirestore.arrayListHistoricalPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListBeachPlaces", dbFirestore.arrayListBeachPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListFoodPlaces", dbFirestore.arrayListFoodPlaces);
+        ((MainActivity)this.getActivity()).bundle.putSerializable("arrayListOthersPlaces", dbFirestore.arrayListOthersPlaces);
         HistoricalPlacesFragment historicalPlacesFragment = new HistoricalPlacesFragment();
         ((MainActivity)this.getActivity()).loadFragment(historicalPlacesFragment);
         ((MainActivity)this.getActivity()).tabLayout.setVisibility(View.VISIBLE);
