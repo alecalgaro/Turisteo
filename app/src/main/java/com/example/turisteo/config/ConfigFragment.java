@@ -176,7 +176,6 @@ public class ConfigFragment extends Fragment {
         ((MainActivity)this.getActivity()).bottom_item_home.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_place.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_favorites.setChecked(false);
-        ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
 
 }

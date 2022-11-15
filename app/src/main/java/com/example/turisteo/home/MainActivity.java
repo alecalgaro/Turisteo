@@ -6,16 +6,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.turisteo.R;
 import com.example.turisteo.config.ConfigFragment;
 import com.example.turisteo.favorites.FavoritesFragment;
-import com.example.turisteo.map.MapFragment;
+import com.example.turisteo.map.MapActivity;
 import com.example.turisteo.place.PlaceInfoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
     // Fragments del bottom_navigation
     PlaceInfoFragment placeInfoFragment = new PlaceInfoFragment();
     FavoritesFragment favoritesFragment = new FavoritesFragment();
-    MapFragment mapFragment = new MapFragment();
     ConfigFragment configFragment = new ConfigFragment();
 
     // Fragments del menu de navegacion superior en el Home, para filtrar por categoria de lugar
@@ -124,10 +123,6 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
                     loadFragment(favoritesFragment);
                     tabLayout.setVisibility(View.GONE);
                     return true;
-                case R.id.mapFragment:
-                    loadFragment(mapFragment);
-                    tabLayout.setVisibility(View.GONE);
-                    return true;
             }
             return false;
         }
@@ -169,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
         bottom_item_home.setChecked(true);
         bottom_item_place.setChecked(false);
         bottom_item_favorites.setChecked(false);
-        bottom_item_map.setChecked(false);
         super.onBackPressed();
     }
 }

@@ -20,9 +20,4 @@
         android:icon="@drawable/ic_favorite"
         android:title="Favoritos">
     </item>
-    <item
-        android:id="@+id/mapFragment"
-        android:icon="@drawable/ic_map"
-        android:title="Mapa">
-    </item>
 </menu>

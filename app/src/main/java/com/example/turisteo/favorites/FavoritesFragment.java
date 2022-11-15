@@ -103,6 +103,5 @@ public class FavoritesFragment extends Fragment {
         ((MainActivity)this.getActivity()).bottom_item_home.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_place.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_favorites.setChecked(true);
-        ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
 }

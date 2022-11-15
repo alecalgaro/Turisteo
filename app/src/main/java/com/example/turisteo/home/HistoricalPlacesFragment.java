@@ -139,7 +139,6 @@ public class HistoricalPlacesFragment extends Fragment {
         ((MainActivity)this.getActivity()).bottom_item_home.setChecked(true);
         ((MainActivity)this.getActivity()).bottom_item_place.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_favorites.setChecked(false);
-        ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
 
     // Activo el tab correspondiente en el menu superior (porque al ir a otra pantalla y volver necesito activar el que corresponde)

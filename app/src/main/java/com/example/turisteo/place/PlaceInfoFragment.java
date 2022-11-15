@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import com.example.turisteo.R;
 import com.example.turisteo.database_local.AdminLocalDB;
 import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.home.Place;
+import com.example.turisteo.map.MapActivity;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -108,6 +108,7 @@ public class PlaceInfoFragment extends Fragment {
         image3 = viewPlace.findViewById(R.id.image3);
         ratingBar = viewPlace.findViewById(R.id.ratingBar);
         btn_addFavorite = viewPlace.findViewById(R.id.btn_addFavorite);
+        btn_map = viewPlace.findViewById(R.id.btn_map);
 
         // Bundle para recibir el objeto enviado:
         Bundle placeReceived = getArguments();
@@ -138,10 +139,15 @@ public class PlaceInfoFragment extends Fragment {
                     }
                 });
 
-                // Boton para ver el mapa
-                //btn_map.setOnClickListener(v -> {
-
-                //});
+                // Boton para mostrar el lugar elegido en el mapa
+                btn_map.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), "Recuerda activar la ubicación del dispositivo", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), MapActivity.class);
+                    intent.putExtra("latitude", latitude);
+                    intent.putExtra("longitude", longitude);
+                    intent.putExtra("name", tv_title.getText());
+                    startActivity(intent);
+                });
             }
         }
         return viewPlace;
@@ -169,6 +175,5 @@ public class PlaceInfoFragment extends Fragment {
         ((MainActivity)this.getActivity()).bottom_item_home.setChecked(false);
         ((MainActivity)this.getActivity()).bottom_item_place.setChecked(true);
         ((MainActivity)this.getActivity()).bottom_item_favorites.setChecked(false);
-        ((MainActivity)this.getActivity()).bottom_item_map.setChecked(false);
     }
 }

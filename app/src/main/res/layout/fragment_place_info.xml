@@ -213,6 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:text="Ver mapa"
+                android:drawableLeft="@drawable/ic_map"
                 app:layout_constraintBottom_toTopOf="@id/btn_addFavorite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

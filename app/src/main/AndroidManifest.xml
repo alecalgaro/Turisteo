@@ -3,7 +3,6 @@
     package="com.example.turisteo">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <!-- Permiso para obtener la ubicacion del usuario mediante GPS -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -14,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Turisteo">
+        <activity android:name=".map.MapActivity"></activity>
         <activity android:name=".login.ForgotPasswordActivity" />
         <activity android:name=".register.RegisterActivity" />
         <activity android:name=".home.MainActivity" />
@@ -25,7 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!-- Para notificaciones con firebase -->
         <service
             android:name=".firebase.MyFirebaseMessagingService"
@@ -34,6 +33,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <!-- meta-data para google maps pasando la API KEY -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 
 </manifest>
