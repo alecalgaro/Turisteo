@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
     // Esos array se llenan en ConfigFragment luego de hacer la consulta a la BD de Firebase y se pasar ahi mismo en este bundle.
     public Bundle bundle = new Bundle();
 
+    // Variable backHome para usar en el metodo onBackPressed para el boton de volver atras
+    public boolean backHome = false;
+
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,16 +154,25 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
                 .addToBackStack(null).commit();
     }
 
-    // Sobreescribo el metodo de presionar el boton hacia atras para que me seleccione como activo el botton de home en el bottom_navigation.
-    // Lo hice porque al mostrar la info de un lugar uso un add (sendPlace) para que se puede volver hacia atras y el scroll en el listado
-    // de lugares parmanezca en el mismo lugar donde estaba para que sea mejor la experiencia de usuario.
+    // Sobreescribo el metodo de presionar el boton hacia atras:
+    // -Si estoy en la pantalla de PlaceInfoFragment quiero que al presionar el boton de atras vuelva a la pantalla de Home para
+    // seguir mostrando el listado de lugares desde donde se quedo el usuario, por eso selecciono el home en el bottom_navigation.
+    // (Al mostrar la info de un lugar uso un add (sendPlace), no replace, para que se puede volver hacia atras.
+    // -Si estoy en otro Fragment que no sea InfoPlaceFragment, entra al else y no hago nada para dejar deshabilitado el boton
+    // y el que usuario deba usar los botones del bottom_navigation.
     @SuppressLint("RestrictedApi")
     @Override
     public void onBackPressed() {
-        bottom_item_config.setChecked(false);
-        bottom_item_home.setChecked(true);
-        bottom_item_place.setChecked(false);
-        bottom_item_favorites.setChecked(false);
-        super.onBackPressed();
+        if(backHome == true){
+            super.onBackPressed();
+            bottom_item_config.setChecked(false);
+            bottom_item_home.setChecked(true);
+            bottom_item_place.setChecked(false);
+            bottom_item_favorites.setChecked(false);
+            tabLayout.setVisibility(View.VISIBLE);
+            backHome = false;
+        }else{
+            // no hago nada para que quede deshabilitado el boton de volver hacia atras
+        }
     }
 }

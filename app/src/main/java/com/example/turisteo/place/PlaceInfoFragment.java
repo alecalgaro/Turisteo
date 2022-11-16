@@ -97,6 +97,9 @@ public class PlaceInfoFragment extends Fragment {
         // Seteo cual es el item del bottom_navigation que debe estar activo
         setChekedBottomItem();
 
+        // Pongo en true la variable backHome del MainActivity para que se pueda usar el boton de volver atras.
+        ((MainActivity)this.getActivity()).backHome = true;
+
         // Creo una instancia de la BD local para cada tabla (favoritos y calificaciones)
         adminLocalDBFavorites = new AdminLocalDBFavorites(getActivity().getApplicationContext(), "favorites_places", null, 1);
         adminLocalDBRatings = new AdminLocalDBRatings(getActivity().getApplicationContext(), "ratings", null, 1);
@@ -207,7 +210,7 @@ public class PlaceInfoFragment extends Fragment {
         collection = place.getCollection();
         id_document = place.getId();
         tv_title.setText(place.getName());
-        tv_rating.setText(place.getStarsProm().substring(0, 3));    // muestro solo tres caracteres, por ejemplo 4.5
+        tv_rating.setText(place.getStarsProm().substring(0, 3));    // muestro tres caracteres (como 4.5), por si da un numero periodico
         tv_description.setText(place.getDescription_long());
         tv_dir.setText(place.getDirection());
         tv_phone.setText(place.getPhone());
@@ -220,7 +223,7 @@ public class PlaceInfoFragment extends Fragment {
         stars_count = Float.parseFloat(place.getStarsCount());
         stars_prom = Float.parseFloat(place.getStarsProm());
         number_reviews = Integer.valueOf(place.getNumber_reviews());
-        // Consulto en la BD local si el usuario ya hizo una valoracion del lugar:
+        // Consulto en la BD local si el usuario ya hizo una calificacion del lugar:
         currentRating = adminLocalDBRatings.getRating(id_document);
         if(currentRating != null){ ratingBar.setRating(Float.parseFloat(currentRating)); }
     }
