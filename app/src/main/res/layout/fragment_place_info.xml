@@ -96,7 +96,7 @@
                         android:layout_height="200dp"
                         android:layout_marginEnd="20dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_card_place" />
+                        android:src="@drawable/img_bg" />
 
                     <ImageView
                         android:id="@+id/image2"
@@ -104,7 +104,7 @@
                         android:layout_height="200dp"
                         android:layout_marginEnd="20dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_card_place" />
+                        android:src="@drawable/img_bg" />
 
                     <ImageView
                         android:id="@+id/image3"
@@ -112,7 +112,7 @@
                         android:layout_height="200dp"
                         android:layout_marginEnd="20dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_card_place" />
+                        android:src="@drawable/img_bg" />
 
                 </LinearLayout>
             </HorizontalScrollView>

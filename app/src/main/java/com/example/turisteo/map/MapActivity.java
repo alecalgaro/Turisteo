@@ -164,14 +164,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     mMap.addMarker(new MarkerOptions()      // agrego un marcador en la ubicacion del usuario
                             .position(user_coordinates)
                             .title("Tu ubicación actual"))
-                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon_user_marker));
+                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_user));
                 }else{
                     Toast.makeText(MapActivity.this, "No se pudo acceder a su ubicación actual", Toast.LENGTH_LONG).show();
                 }
 
                 // Agrego un marcador en la ubicación del lugar elegido
                 place_coordinates = new LatLng(place_latitude, place_longitude);
-                mMap.addMarker(new MarkerOptions().position(place_coordinates).title(place_name));
+                mMap.addMarker(new MarkerOptions()
+                        .position(place_coordinates)
+                        .title(place_name))
+                        .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_place));
                 // a mMap.moveCamera le paso las coordenadas y el nivel de zoom, usando "newLatLngZoom", sino con "newLatLng" solo las coordenadas
                 //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place_coordinates, 15));
 
