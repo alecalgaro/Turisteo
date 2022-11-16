@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +14,12 @@ import android.widget.FrameLayout;
 import com.example.turisteo.R;
 import com.example.turisteo.config.ConfigFragment;
 import com.example.turisteo.favorites.FavoritesFragment;
-import com.example.turisteo.map.MapActivity;
 import com.example.turisteo.place.PlaceInfoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
-public class MainActivity extends AppCompatActivity implements IComunicacionFragments {
+public class MainActivity extends AppCompatActivity implements IComunicationFragments {
 
     FrameLayout frameContainer;
 
@@ -156,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements IComunicacionFrag
     // Sobreescribo el metodo de presionar el boton hacia atras para que me seleccione como activo el botton de home en el bottom_navigation.
     // Lo hice porque al mostrar la info de un lugar uso un add (sendPlace) para que se puede volver hacia atras y el scroll en el listado
     // de lugares parmanezca en el mismo lugar donde estaba para que sea mejor la experiencia de usuario.
-    // Si necesito que el boton de volver hacia atras funcione en otros fragment deberia ver como hago.
     @SuppressLint("RestrictedApi")
     @Override
     public void onBackPressed() {

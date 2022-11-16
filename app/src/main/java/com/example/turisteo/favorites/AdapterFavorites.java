@@ -1,7 +1,6 @@
 package com.example.turisteo.favorites;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.database_local.AdminLocalDB;
-import com.example.turisteo.home.MainActivity;
+import com.example.turisteo.database_local.AdminLocalDBFavorites;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
     private Context context;                    // para la clase de donde estemos llamando a este adaptador
     private LayoutInflater inflater;
 
-    AdminLocalDB adminLocalDB;
+    AdminLocalDBFavorites adminLocalDBFavorites;
 
     public AdapterFavorites(Context context, ArrayList<Favorite> listFavorites) {
         this.context = context;
@@ -48,7 +46,7 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
     public View getView(int position, View view, ViewGroup parent) {
 
         // Creo una instancia de la BD local
-        adminLocalDB = new AdminLocalDB(context, "favorites_places", null, 1);
+        adminLocalDBFavorites = new AdminLocalDBFavorites(context, "favorites_places", null, 1);
 
         // Objeto para cada item (favorito) a mostrar:
         final Favorite favorite = (Favorite) getItem(position);
@@ -71,7 +69,7 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
         // Eliminar favorito
         // Elimino aca porque tengo acceso al icon_delete y al favorito que quiero eliminar para acceder a su id
         icon_delete.setOnClickListener(v -> {
-            adminLocalDB.deleteFavorite(favorite.getId());
+            adminLocalDBFavorites.deleteFavorite(favorite.getId());
             Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
             //intent.putExtra("goToFavorite", "");
             //Intent intent = new Intent(context, MainActivity.class);

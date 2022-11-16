@@ -10,7 +10,7 @@ import com.example.turisteo.favorites.Favorite;
 
 import java.util.ArrayList;
 
-public class AdminLocalDB extends SQLiteOpenHelper {
+public class AdminLocalDBFavorites extends SQLiteOpenHelper {
 
     // En esta clase pongo lo relacionado a la BD y la voy utilizando en las pantallas donde necesito
 
@@ -21,7 +21,7 @@ public class AdminLocalDB extends SQLiteOpenHelper {
     String sqlCreate = "CREATE TABLE Favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, image TEXT, name TEXT)";
 
     // Constructor:
-    public AdminLocalDB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public AdminLocalDBFavorites(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, db_nombre, factory, db_version);
     }
 

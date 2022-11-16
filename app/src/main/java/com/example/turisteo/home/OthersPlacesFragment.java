@@ -35,7 +35,7 @@ public class OthersPlacesFragment extends Fragment {
     // Activity que nos permite tener el contexto de nuestra aplicación:
     Activity activity;
     // Referencia a la interfaz que permite la comunicacion entre los dos fragments:
-    IComunicacionFragments interfaceComunicacionFragments;
+    IComunicationFragments interfaceComunicationFragments;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,7 +107,7 @@ public class OthersPlacesFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
-                    interfaceComunicacionFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
+                    interfaceComunicationFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
                     // Oculto la barra de navegacion superior al pasar al PlaceInfoFragment
                     hideTabLayout();
                 }
@@ -125,7 +125,7 @@ public class OthersPlacesFragment extends Fragment {
         // Si el contexto que le esta llegando es una instancia de una activity:
         if (context instanceof Activity) {
             this.activity = (Activity) context;
-            interfaceComunicacionFragments = (IComunicacionFragments) this.activity;
+            interfaceComunicationFragments = (IComunicationFragments) this.activity;
         }
     }
 

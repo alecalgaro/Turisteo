@@ -9,10 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.database_local.AdminLocalDB;
+import com.example.turisteo.database_local.AdminLocalDBFavorites;
 import com.example.turisteo.home.MainActivity;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class FavoritesFragment extends Fragment {
     private ListView lv_favorites;
     private AdapterFavorites adapterFavorites;
 
-    AdminLocalDB adminLocalDB;
+    AdminLocalDBFavorites adminLocalDBFavorites;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,7 +77,7 @@ public class FavoritesFragment extends Fragment {
         setChekedBottomItem();
 
         // Creo una instancia de la BD local
-        adminLocalDB = new AdminLocalDB(getActivity().getApplicationContext(), "favorites_places", null, 1);
+        adminLocalDBFavorites = new AdminLocalDBFavorites(getActivity().getApplicationContext(), "favorites_places", null, 1);
 
         // Inflate the layout for this fragment
         View viewFavorites = inflater.inflate(R.layout.fragment_favorites, container, false);
@@ -92,7 +91,7 @@ public class FavoritesFragment extends Fragment {
         adapterFavorites = new AdapterFavorites(getContext(), arrayList);
         lv_favorites.setAdapter(adapterFavorites);
         // Obtengo los favoritos de la BD local (se guardan en el arrayList y se muestran)
-        adminLocalDB.getFavorites(arrayList);
+        adminLocalDBFavorites.getFavorites(arrayList);
 
         return viewFavorites;       // para utilizar ese objeto viewPlaces dentro del activity
     }

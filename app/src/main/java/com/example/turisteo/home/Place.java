@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Place implements Serializable {    // lo del implements Serializable se hace para poder enviarle ese elemento en el putExtra al hacer click
                                                 // Eso lo habia usado para para la app de series, no para Bedelia, pero lo deje para recordar.
+    private String collection;
     private String id;
     private String category;
     private String name;
@@ -17,11 +18,14 @@ public class Place implements Serializable {    // lo del implements Serializabl
     private String web;
     private String latitude;
     private String longitude;
-    private String stars;
+    private String stars_count;
+    private String stars_prom;
     private String number_reviews;
 
-
-    public Place(String id, String category, String name, String description_short, String description_long, String url_image1, String url_image2, String url_image3, String direction, String phone, String web, String latitude, String longitude, String stars, String number_reviews) {
+    public Place(String collection, String id, String category, String name, String description_short, String description_long,
+                 String url_image1, String url_image2, String url_image3, String direction, String phone, String web,
+                 String latitude, String longitude, String stars_count, String stars_prom, String number_reviews) {
+        this.collection = collection;
         this.id = id;
         this.category = category;
         this.name = name;
@@ -35,9 +39,16 @@ public class Place implements Serializable {    // lo del implements Serializabl
         this.web = web;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.stars = stars;
+        this.stars_count = stars_count;
+        this.stars_prom = stars_prom;
         this.number_reviews = number_reviews;
     }
+
+    public String getCollection() {
+        return collection;
+    }
+
+    public void setCollection(String collection) { this.collection = collection; }
 
     public String getId() {
         return id;
@@ -143,12 +154,20 @@ public class Place implements Serializable {    // lo del implements Serializabl
         this.longitude = longitude;
     }
 
-    public String getStars() {
-        return stars;
+    public String getStarsCount() {
+        return stars_count;
     }
 
-    public void setStars(String stars) {
-        this.stars = stars;
+    public void setStarsCount(String stars_count) {
+        this.stars_count = stars_count;
+    }
+
+    public String getStarsProm() {
+        return stars_prom;
+    }
+
+    public void setStarsProm(String stars_prom) {
+        this.stars_prom = stars_prom;
     }
 
     public String getNumber_reviews() {

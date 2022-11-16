@@ -15,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.turisteo.R;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class HistoricalPlacesFragment extends Fragment {
     // Activity que nos permite tener el contexto de nuestra aplicación:
     Activity activity;
     // Referencia a la interfaz que permite la comunicacion entre los dos fragments:
-    IComunicacionFragments interfaceComunicacionFragments;
+    IComunicationFragments interfaceComunicationFragments;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -110,7 +109,7 @@ public class HistoricalPlacesFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
-                    interfaceComunicacionFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
+                    interfaceComunicationFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
                 }
             });
         }
@@ -126,7 +125,7 @@ public class HistoricalPlacesFragment extends Fragment {
         // Si el contexto que le esta llegando es una instancia de una activity:
         if (context instanceof Activity) {
             this.activity = (Activity) context;
-            interfaceComunicacionFragments = (IComunicacionFragments) this.activity;
+            interfaceComunicationFragments = (IComunicationFragments) this.activity;
         }
     }
 

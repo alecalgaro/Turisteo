@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 
 import com.example.turisteo.home.Place;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DBFirestore {
 
@@ -21,11 +25,15 @@ public class DBFirestore {
     public ArrayList<Place> arrayListFoodPlaces = new ArrayList<>();
     public ArrayList<Place> arrayListOthersPlaces = new ArrayList<>();
 
-    public boolean result = false;
+    public String collection_db;
 
-    public void getDataFirestore(String path){
+    public boolean result = false;
+    public boolean result_update = false;
+
+    public void getDataFirestore(String collection){
         // Leo todos los documentos de la base de datos en Firebase que correspondan a la coleccion de la ciudad elegida (recibida en el path):
-        db.collection(path)
+        collection_db = collection;      // para poder pasarla a cada Place
+        db.collection(collection)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
@@ -43,46 +51,46 @@ public class DBFirestore {
                                 switch (document.getString("category")){
                                     case "historical":
                                         arrayListHistoricalPlaces.add(
-                                                new Place(document.getId(), document.getString("category"),
+                                                new Place(collection_db, document.getId(), document.getString("category"),
                                                         document.getString("name"), document.getString("description_short"),
                                                         document.getString("description_long"), document.getString("url_image1"),
                                                         document.getString("url_image2"), document.getString("url_image3"),
                                                         document.getString("direction"), document.getString("phone"), document.getString("web"),
                                                         document.getString("latitude"), document.getString("longitude"),
-                                                        document.getString("stars"), document.getString("number_reviews")
+                                                        document.getString("stars_count"), document.getString("stars_prom"), document.getString("number_reviews")
                                                 ));
                                         break;
                                     case "beach":
                                         arrayListBeachPlaces.add(
-                                                new Place(document.getId(), document.getString("category"),
+                                                new Place(collection_db, document.getId(), document.getString("category"),
                                                         document.getString("name"), document.getString("description_short"),
                                                         document.getString("description_long"), document.getString("url_image1"),
                                                         document.getString("url_image2"), document.getString("url_image3"),
                                                         document.getString("direction"), document.getString("phone"), document.getString("web"),
                                                         document.getString("latitude"), document.getString("longitude"),
-                                                        document.getString("stars"), document.getString("number_reviews")
+                                                        document.getString("stars_count"), document.getString("stars_prom"), document.getString("number_reviews")
                                                 ));
                                         break;
                                     case "food":
                                         arrayListFoodPlaces.add(
-                                                new Place(document.getId(), document.getString("category"),
+                                                new Place(collection_db, document.getId(), document.getString("category"),
                                                         document.getString("name"), document.getString("description_short"),
                                                         document.getString("description_long"), document.getString("url_image1"),
                                                         document.getString("url_image2"), document.getString("url_image3"),
                                                         document.getString("direction"), document.getString("phone"), document.getString("web"),
                                                         document.getString("latitude"), document.getString("longitude"),
-                                                        document.getString("stars"), document.getString("number_reviews")
+                                                        document.getString("stars_count"), document.getString("stars_prom"), document.getString("number_reviews")
                                                 ));
                                         break;
                                     case "others":
                                         arrayListOthersPlaces.add(
-                                                new Place(document.getId(), document.getString("category"),
+                                                new Place(collection_db, document.getId(), document.getString("category"),
                                                         document.getString("name"), document.getString("description_short"),
                                                         document.getString("description_long"), document.getString("url_image1"),
                                                         document.getString("url_image2"), document.getString("url_image3"),
                                                         document.getString("direction"), document.getString("phone"), document.getString("web"),
                                                         document.getString("latitude"), document.getString("longitude"),
-                                                        document.getString("stars"), document.getString("number_reviews")
+                                                        document.getString("stars_count"), document.getString("stars_prom"), document.getString("number_reviews")
                                                 ));
                                         break;
                                 }
@@ -91,5 +99,30 @@ public class DBFirestore {
                     }
                 });
     }
+
+    // Actualizacion de la valoracione (stars_count, starts_prom y number_reviews) de un lugar
+    public void updateValoration(String collection, String id_document, String stars_count, String stars_prom, String number_reviews){
+        // En un HashMap se van agregando (put) los campos a actualizar (clave, valor)
+        Map<String, Object> map = new HashMap<>();
+        map.put("stars_count", stars_count);
+        map.put("stars_prom", stars_prom);
+        map.put("number_reviews", number_reviews);
+
+        // Accedo a la coleccion y documento de ese lugar y actualizo.
+        // Con result_update puedo saber desde un activity si la actualizacion fue exitosa o no.
+        db.collection(collection).document(id_document)
+                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                result_update = true;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result_update = false;
+            }
+        });
+    }
+
 
 }

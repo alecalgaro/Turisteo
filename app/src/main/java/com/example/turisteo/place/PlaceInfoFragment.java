@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.turisteo.R;
-import com.example.turisteo.database_local.AdminLocalDB;
+import com.example.turisteo.database_local.AdminLocalDBFavorites;
+import com.example.turisteo.database_local.AdminLocalDBRatings;
+import com.example.turisteo.firebase.DBFirestore;
 import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.home.Place;
 import com.example.turisteo.map.MapActivity;
@@ -33,14 +36,19 @@ public class PlaceInfoFragment extends Fragment {
 
     LinearLayout warning;
 
-    AdminLocalDB adminLocalDB;
+    AdminLocalDBFavorites adminLocalDBFavorites;
+    AdminLocalDBRatings adminLocalDBRatings;
+
+    DBFirestore dbFirestore = new DBFirestore();
 
     TextView tv_title, tv_rating, tv_description, tv_dir, tv_phone, tv_web;
     ImageView image1, image2, image3;
     RatingBar ratingBar;
     Button btn_map, btn_addFavorite;
-
+    public Float stars_count, stars_prom;
+    public int number_reviews;
     String latitude, longitude;
+    String id_document, collection, currentRating;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,14 +97,14 @@ public class PlaceInfoFragment extends Fragment {
         // Seteo cual es el item del bottom_navigation que debe estar activo
         setChekedBottomItem();
 
-        // Creo una instancia de la BD local
-        adminLocalDB = new AdminLocalDB(getActivity().getApplicationContext(), "favorites_places", null, 1);
+        // Creo una instancia de la BD local para cada tabla (favoritos y calificaciones)
+        adminLocalDBFavorites = new AdminLocalDBFavorites(getActivity().getApplicationContext(), "favorites_places", null, 1);
+        adminLocalDBRatings = new AdminLocalDBRatings(getActivity().getApplicationContext(), "ratings", null, 1);
 
         // Inflate the layout for this fragment
         View viewPlace = inflater.inflate(R.layout.fragment_place_info, container, false);
 
         warning = viewPlace.findViewById(R.id.warning);
-
         tv_title = viewPlace.findViewById(R.id.tv_title);
         tv_rating = viewPlace.findViewById(R.id.tv_rating);
         tv_description = viewPlace.findViewById(R.id.tv_description);
@@ -125,7 +133,7 @@ public class PlaceInfoFragment extends Fragment {
                 Place finalPlace = place;   // al usar la linea para insertar en la BD me pide agregar esto
                 btn_addFavorite.setOnClickListener(v -> {
                     // Se añade el lugar a la BD local como favorito
-                    adminLocalDB.insertFavorite(finalPlace.getUrlImage1(), finalPlace.getName());
+                    adminLocalDBFavorites.insertFavorite(finalPlace.getUrlImage1(), finalPlace.getName());
                     Toast.makeText(getContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
                 });
 
@@ -150,13 +158,56 @@ public class PlaceInfoFragment extends Fragment {
                 });
             }
         }
+
+        // Control de calificaciones. Con setOnRatingBarChangeListener se detecta cuando hay un cambio en el ratingBar.
+        // Debo considerar dos opciones, si el usuario califica por primera vez el lugar hago la actualizacion en Firebase
+        // e inserto esa calificacion en la BD local. Mientras que si el usuario ya califico anteriormente el lugar y quiere
+        // modificar su calificacion, debo tomar su calificacion actual y cambiarla por la nueva, no sumarla como si es una distinta.
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean b) {
+
+                if(currentRating == null){      // primera vez que el usuario califica el lugar
+                    number_reviews = number_reviews + 1;
+                    stars_count = stars_count + rating;     // stars_count es la suma de todas las calificaciones (guardada en Firestore)
+                    adminLocalDBRatings.insertRating(id_document, String.valueOf(rating));      // inserto en la tabla de ratings de la BD local
+                } else {
+                    // Si el usuario ya califico antes el lugar debo actualizar su calificacion, no sumar una nueva, entonces
+                    // a la cantidad de estrellas le resto la calificacion actual del usuario, le sumo la nueva y divido por el numero de
+                    // calificaciones que ya habia porque no es una nueva sino una actualizacion, asi que no modifico el number_reviews.
+                    stars_count = stars_count - Float.parseFloat(currentRating) + rating;
+                    adminLocalDBRatings.updateRating(id_document, String.valueOf(rating));      // actualizo la tabla de ratings de la BD local
+                }
+
+                stars_prom = stars_count/number_reviews;    // stars_prom es el promedio (todas las calificaciones dividido la cantidad)
+                currentRating = String.valueOf(rating);     // actualizo la calificacion actual del usuario por si vuelve a actualizarla en el momento
+                // Actualizo en Firebase
+                dbFirestore.updateValoration(collection, id_document, Float.toString(stars_count), Float.toString(stars_prom), Integer.toString(number_reviews));
+
+                // Espero dos segundos por las dudas para que se realice la actualizacion y luego muestro si fue exitosa o no y actualizo el TextView.
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(dbFirestore.result_update == true){     // si la consulta fue existosa
+                            Toast.makeText(getContext(), "Calificación actualizada.", Toast.LENGTH_LONG).show();
+                            tv_rating.setText(String.valueOf(stars_prom));      // actualizo el TextView
+                        }else{
+                            Toast.makeText(getContext(), "Hubo un error al actualizar la calificación.", Toast.LENGTH_LONG).show();
+                        }
+                    }}, 2000);
+            }
+        });
+
         return viewPlace;
     }
 
     // Se carga toda la informacion del lugar en el diseño
     public void loadInfo(Place place){
+        collection = place.getCollection();
+        id_document = place.getId();
         tv_title.setText(place.getName());
-        tv_rating.setText(place.getStars());
+        tv_rating.setText(place.getStarsProm().substring(0, 3));    // muestro solo tres caracteres, por ejemplo 4.5
         tv_description.setText(place.getDescription_long());
         tv_dir.setText(place.getDirection());
         tv_phone.setText(place.getPhone());
@@ -166,7 +217,12 @@ public class PlaceInfoFragment extends Fragment {
         Picasso.get().load(place.getUrlImage3()).into(image3);
         latitude = place.getLatitude();
         longitude = place.getLongitude();
-        ratingBar.setRating(Float.valueOf(place.getStars()));
+        stars_count = Float.parseFloat(place.getStarsCount());
+        stars_prom = Float.parseFloat(place.getStarsProm());
+        number_reviews = Integer.valueOf(place.getNumber_reviews());
+        // Consulto en la BD local si el usuario ya hizo una valoracion del lugar:
+        currentRating = adminLocalDBRatings.getRating(id_document);
+        if(currentRating != null){ ratingBar.setRating(Float.parseFloat(currentRating)); }
     }
 
     @SuppressLint("RestrictedApi")
