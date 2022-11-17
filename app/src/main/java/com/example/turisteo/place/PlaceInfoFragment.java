@@ -97,9 +97,6 @@ public class PlaceInfoFragment extends Fragment {
         // Seteo cual es el item del bottom_navigation que debe estar activo
         setChekedBottomItem();
 
-        // Pongo en true la variable backHome del MainActivity para que se pueda usar el boton de volver atras.
-        ((MainActivity)this.getActivity()).backHome = true;
-
         // Creo una instancia de la BD local para cada tabla (favoritos y calificaciones)
         adminLocalDBFavorites = new AdminLocalDBFavorites(getActivity().getApplicationContext(), "favorites_places", null, 1);
         adminLocalDBRatings = new AdminLocalDBRatings(getActivity().getApplicationContext(), "ratings", null, 1);
@@ -136,11 +133,16 @@ public class PlaceInfoFragment extends Fragment {
                 Place finalPlace = place;   // al usar la linea para insertar en la BD me pide agregar esto
                 btn_addFavorite.setOnClickListener(v -> {
                     // Se añade el lugar a la BD local como favorito
-                    adminLocalDBFavorites.insertFavorite(finalPlace.getUrlImage1(), finalPlace.getName());
+                    adminLocalDBFavorites.insertFavorite(
+                            finalPlace.getCollection(), finalPlace.getId(), finalPlace.getCategory(), finalPlace.getName(), finalPlace.getDescription_short(),
+                            finalPlace.getDescription_long(), finalPlace.getUrlImage1(), finalPlace.getUrlImage2(), finalPlace.getUrlImage3(),
+                            finalPlace.getDirection(), finalPlace.getPhone(), finalPlace.getWeb(), finalPlace.getLatitude(),
+                            finalPlace.getLongitude(), finalPlace.getStarsCount(), finalPlace.getStarsProm(), finalPlace.getNumber_reviews()
+                    );
                     Toast.makeText(getContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
                 });
 
-                // Intent para abrir pagina web del lugar al presionar sobre el TextView
+                // Intent para abrir pagina web o red social del lugar al presionar sobre el TextView
                 Place finalPlace1 = place;
                 tv_web.setOnClickListener(v -> {
                     if(!finalPlace1.getWeb().equals("-")){      // debe ser una url valida (con http://... o https://...)

@@ -109,7 +109,7 @@ public class HistoricalPlacesFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // Envío el lugar seleccionado para abrir el otro fragment con su informacion:
-                    interfaceComunicationFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)));
+                    interfaceComunicationFragments.sendPlace(finalArrayList.get(lv_places.getPositionForView(view)), "home");
                 }
             });
         }

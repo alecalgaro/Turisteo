@@ -11,18 +11,19 @@ import android.widget.Toast;
 
 import com.example.turisteo.R;
 import com.example.turisteo.database_local.AdminLocalDBFavorites;
+import com.example.turisteo.home.Place;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class AdapterFavorites extends BaseAdapter {      // recordar que extiende de BaseAdaptar. En caso de usar un RecyclerView (es mas nuevo) es distinto. Lo tengo en la carpeta del curso de Android
-    private ArrayList<Favorite> listFavorites;
+    private ArrayList<Place> listFavorites;
     private Context context;                    // para la clase de donde estemos llamando a este adaptador
     private LayoutInflater inflater;
 
     AdminLocalDBFavorites adminLocalDBFavorites;
 
-    public AdapterFavorites(Context context, ArrayList<Favorite> listFavorites) {
+    public AdapterFavorites(Context context, ArrayList<Place> listFavorites) {
         this.context = context;
         this.listFavorites = listFavorites;
     }
@@ -49,7 +50,7 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
         adminLocalDBFavorites = new AdminLocalDBFavorites(context, "favorites_places", null, 1);
 
         // Objeto para cada item (favorito) a mostrar:
-        final Favorite favorite = (Favorite) getItem(position);
+        final Place place = (Place) getItem(position);
 
         view = LayoutInflater.from(context).inflate(R.layout.card_favorite, null);    // "inflamos" la lista de items, es como para convertir un layout en un View
 
@@ -61,15 +62,15 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
         // Inicializo:
         // Uso la libreria "Picasso" para cargar imagenes desde una URL
         Picasso.get()
-                .load(favorite.getImage())
+                .load(place.getUrlImage1())
                 .into(img);
 
-        tv_name.setText(favorite.getName());
+        tv_name.setText(place.getName());
 
         // Eliminar favorito
         // Elimino aca porque tengo acceso al icon_delete y al favorito que quiero eliminar para acceder a su id
         icon_delete.setOnClickListener(v -> {
-            adminLocalDBFavorites.deleteFavorite(favorite.getId());
+            adminLocalDBFavorites.deleteFavorite(place.getId());
             Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
             //intent.putExtra("goToFavorite", "");
             //Intent intent = new Intent(context, MainActivity.class);

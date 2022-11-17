@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.turisteo.favorites.Favorite;
+import com.example.turisteo.home.Place;
 
 import java.util.ArrayList;
 
@@ -17,8 +17,13 @@ public class AdminLocalDBFavorites extends SQLiteOpenHelper {
     private static final int db_version = 1;
     private static final String db_nombre = "favorites_places";
 
+    // Un lugar que se agrega como favorito tendra todos los datos de ese lugar, asi el usuario desde la pantalla de favoritos
+    // puede presionar sobre la card de uno y que se abra el PlaceInfoFragment con la informacion del lugar.
+
     // Sentencia para la creación de la tabla Favorites:
-    String sqlCreate = "CREATE TABLE Favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, image TEXT, name TEXT)";
+    String sqlCreate = "CREATE TABLE Favorites (collection TEXT, id TEXT, category TEXT, name TEXT, description_short TEXT, " +
+            "description_long TEXT, url_image1 TEXT, url_image2 TEXT, url_image3 TEXT, direction TEXT, phone TEXT, web TEXT," +
+            "latitude TEXT, longitude TEXT, stars_count TEXT, stars_prom TEXT, number_reviews TEXT)";
 
     // Constructor:
     public AdminLocalDBFavorites(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -40,31 +45,71 @@ public class AdminLocalDBFavorites extends SQLiteOpenHelper {
     }
 
     // Listar todos los favoritos de la BD:
-    public void getFavorites(ArrayList<Favorite> arrayList) {       // uso un array de datos para añadirlos al ListView
+    public void getFavorites(ArrayList<Place> arrayList) {       // uso un array de datos para añadirlos al ListView
         SQLiteDatabase db = getWritableDatabase();
-        Cursor c = db.rawQuery(" SELECT id, image, name FROM Favorites", null);
+        //Cursor c = db.rawQuery(" SELECT id, image, name FROM Favorites", null);
+        Cursor c = db.rawQuery(" SELECT collection, id, category, name, description_short, description_long," +
+                "url_image1, url_image2, url_image3, direction, phone, web, latitude, longitude," +
+                "stars_count, stars_prom, number_reviews " +
+                "FROM Favorites", null);
 
         // Nos aseguramos de que existe al menos un registro:
         if (c.moveToFirst()) {
             // Recorremos el cursor hasta que no haya mas registros (c.moveToNext()):
             do {
                 // Voy obteniendo los datos:
-                String id = c.getString(0);
-                String image = c.getString(1);
-                String name = c.getString(2);
+                String collection = c.getString(0);
+                String id = c.getString(1);
+                String category = c.getString(2);
+                String name = c.getString(3);
+                String description_short = c.getString(4);
+                String description_long = c.getString(5);
+                String url_image1 = c.getString(6);
+                String url_image2 = c.getString(7);
+                String url_image3 = c.getString(8);
+                String direction = c.getString(9);
+                String phone = c.getString(10);
+                String web = c.getString(11);
+                String latitude = c.getString(12);
+                String longitude = c.getString(13);
+                String stars_count = c.getString(14);
+                String stars_prom = c.getString(15);
+                String number_reviews = c.getString(16);
+
                 // Los voy agregando en el arrayList (ese arrayList luego se usa para mostrar los elementos en el ListView):
-                arrayList.add(new Favorite(id, image, name));
+                arrayList.add(new Place(collection, id, category, name, description_short, description_long,
+                        url_image1, url_image2, url_image3, direction, phone, web,
+                        latitude, longitude, stars_count, stars_prom, number_reviews));
+
             } while (c.moveToNext());
         }
         db.close();
     }
 
     // Insertar nuevo lugar favorito en la BD:
-    public void insertFavorite(String image, String name) {
+    public void insertFavorite(String collection, String id, String category, String name, String description_short, String description_long,
+                               String url_image1, String url_image2, String url_image3, String direction, String phone, String web,
+                               String latitude, String longitude, String stars_count, String stars_prom, String number_reviews)  {
+
         // Se crea el nuevo favorito a insertar como objeto ContentValues:
         ContentValues newFavorite = new ContentValues();
-        newFavorite.put("image", image);
+        newFavorite.put("collection", collection);
+        newFavorite.put("id", id);
+        newFavorite.put("category", category);
         newFavorite.put("name", name);
+        newFavorite.put("description_short", description_short);
+        newFavorite.put("description_long", description_long);
+        newFavorite.put("url_image1", url_image1);
+        newFavorite.put("url_image2", url_image2);
+        newFavorite.put("url_image3", url_image3);
+        newFavorite.put("direction", direction);
+        newFavorite.put("phone", phone);
+        newFavorite.put("web", web);
+        newFavorite.put("latitude", latitude);
+        newFavorite.put("longitude", longitude);
+        newFavorite.put("stars_count", stars_count);
+        newFavorite.put("stars_prom", stars_prom);
+        newFavorite.put("number_reviews", number_reviews);
 
         // Se inserta en la base de datos:
         SQLiteDatabase db = getWritableDatabase();

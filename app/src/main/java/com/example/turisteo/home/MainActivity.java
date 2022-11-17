@@ -45,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
     // Esos array se llenan en ConfigFragment luego de hacer la consulta a la BD de Firebase y se pasar ahi mismo en este bundle.
     public Bundle bundle = new Bundle();
 
-    // Variable backHome para usar en el metodo onBackPressed para el boton de volver atras
+    // Variables backHome y backFavorites para usar en el metodo onBackPressed para el boton de volver atras
     public boolean backHome = false;
+    public boolean backFavorites = false;
 
     @SuppressLint("ResourceType")
     @Override
@@ -138,8 +139,18 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
     }
 
     @Override
-    // Se sobreescribe este metodo porque es de la interface que se implementa
-    public void sendPlace(Place place) {
+    // Se sobreescribe este metodo porque es de la interface que se implementa.
+    // Si llamo a la funcion sendPlace desde un fragment de Home (de listado de lugares) pongo backHome en true y backFavorites
+    // en false, y si la llamo desde FavoritesFragment lo contrario, para la funcionalidad del boton onBackPressed abajo.
+    public void sendPlace(Place place, String backFragment) {
+        if(backFragment.equals("home")){
+            backHome = true;
+            backFavorites = false;
+        }else{
+            backFavorites = true;
+            backHome = false;
+        }
+
         // Instanciamos el Fragment de informacion del lugar:
         placeInfoFragment = new PlaceInfoFragment();
 
@@ -148,18 +159,21 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
         bundleInfo.putSerializable("place", place);
         placeInfoFragment.setArguments(bundleInfo);
 
-        // Cargamos el fragment en el activity:     (recordar usar replace y no add, porque sino aparece en la misma pantalla que el listado de lugares)
+        // Cargamos el fragment en el activity: aca uso add en lugar de replace porque quiero que permanezca abierto el otro fragment
+        // para poder volver hacia atras y que el scroll en el listado de lugares permanezca en el mismo lugar.
         // El addToBackStack(null) es porque si no lo tiene, al presionar la flecha hacia atrás se cerraba la app
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container, placeInfoFragment)
                 .addToBackStack(null).commit();
     }
 
-    // Sobreescribo el metodo de presionar el boton hacia atras:
-    // -Si estoy en la pantalla de PlaceInfoFragment quiero que al presionar el boton de atras vuelva a la pantalla de Home para
-    // seguir mostrando el listado de lugares desde donde se quedo el usuario, por eso selecciono el home en el bottom_navigation.
-    // (Al mostrar la info de un lugar uso un add (sendPlace), no replace, para que se puede volver hacia atras.
-    // -Si estoy en otro Fragment que no sea InfoPlaceFragment, entra al else y no hago nada para dejar deshabilitado el boton
-    // y el que usuario deba usar los botones del bottom_navigation.
+    // Sobreescribo el metodo de presionar el boton hacia atras, teniendo tres opciones de uso:
+    // 1- Si desde un listado de lugares presiono uno y accedo a la pantalla de PlaceInfoFragment (en sendPlace uso backFragment = "home")
+    // quiero que al presionar el boton de atras vuelva a la pantalla del listado de lugares para seguir mostrando desde donde se quedo
+    // el usuario, por eso selecciono el home en el bottom_navigation y visible el tabLayout.
+    // 2- Si estoy en FavoritesFragment y presiono uno, muestro su PlaceInfoFragment y en sendPlace uso backFragment = "favorites",
+    // asi al presionar el boton de volver hacia atras vuelve a la pantalla de favoritos donde se habia quedado el usuario.
+    // 3- Si estoy en otro Fragment, entra al else y no hago nada para dejar deshabilitado el boton de volver hacia atras.
+    // (Hago esto porque al mostrar la info de un lugar uso un add (sendPlace), no replace, para que se puede volver hacia atras.
     @SuppressLint("RestrictedApi")
     @Override
     public void onBackPressed() {
@@ -171,6 +185,13 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
             bottom_item_favorites.setChecked(false);
             tabLayout.setVisibility(View.VISIBLE);
             backHome = false;
+        }else if (backFavorites == true){
+            super.onBackPressed();
+            bottom_item_config.setChecked(false);
+            bottom_item_home.setChecked(false);
+            bottom_item_place.setChecked(false);
+            bottom_item_favorites.setChecked(true);
+            backFavorites = false;
         }else{
             // no hago nada para que quede deshabilitado el boton de volver hacia atras
         }
