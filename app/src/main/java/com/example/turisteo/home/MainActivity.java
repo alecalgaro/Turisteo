@@ -45,9 +45,10 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
     // Esos array se llenan en ConfigFragment luego de hacer la consulta a la BD de Firebase y se pasar ahi mismo en este bundle.
     public Bundle bundle = new Bundle();
 
-    // Variables backHome y backFavorites para usar en el metodo onBackPressed para el boton de volver atras
+    // Variables para usar en el metodo onBackPressed para el boton de volver atras
     public boolean backHome = false;
     public boolean backFavorites = false;
+    public boolean inFavorites = false;
 
     @SuppressLint("ResourceType")
     @Override
@@ -166,18 +167,25 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
                 .addToBackStack(null).commit();
     }
 
-    // Sobreescribo el metodo de presionar el boton hacia atras, teniendo tres opciones de uso:
-    // 1- Si desde un listado de lugares presiono uno y accedo a la pantalla de PlaceInfoFragment (en sendPlace uso backFragment = "home")
+    // Sobreescribo el metodo de presionar el boton hacia atras, teniendo cuatro opciones de uso:
+    // 1- Si desde el listado de lugares presiono uno para ir a PlaceInfoFragment y luego presiono el boton de favoritos en el bottom_navigation
+    // y quiero volver hacia atras sin hacer nada en Favoritos, vuelvo directo a Home con el listado de lugares.
+    // 2- Si desde un listado de lugares presiono uno y accedo a la pantalla de PlaceInfoFragment (en sendPlace uso backFragment = "home")
     // quiero que al presionar el boton de atras vuelva a la pantalla del listado de lugares para seguir mostrando desde donde se quedo
     // el usuario, por eso selecciono el home en el bottom_navigation y visible el tabLayout.
-    // 2- Si estoy en FavoritesFragment y presiono uno, muestro su PlaceInfoFragment y en sendPlace uso backFragment = "favorites",
+    // 3- Si estoy en FavoritesFragment y presiono uno de los favoritos, abro su PlaceInfoFragment y en sendPlace uso backFragment = "favorites",
     // asi al presionar el boton de volver hacia atras vuelve a la pantalla de favoritos donde se habia quedado el usuario.
-    // 3- Si estoy en otro Fragment, entra al else y no hago nada para dejar deshabilitado el boton de volver hacia atras.
-    // (Hago esto porque al mostrar la info de un lugar uso un add (sendPlace), no replace, para que se puede volver hacia atras.
+    // 4- Si estoy en otro Fragment, entra al else y no hago nada para dejar deshabilitado el boton de volver hacia atras.
+    // (Hago esto porque al mostrar PlaceInfoFragment uso un "add" (en sendPlace), no replace, para que se puede volver hacia atras.
     @SuppressLint("RestrictedApi")
     @Override
     public void onBackPressed() {
-        if(backHome == true){
+        if(backHome == true && inFavorites == true){
+            super.onBackPressed();
+            navigation.setSelectedItemId(R.id.homeFragment);
+            backHome = false;
+            inFavorites = false;
+        }else if (backHome == true){
             super.onBackPressed();
             bottom_item_config.setChecked(false);
             bottom_item_home.setChecked(true);
@@ -185,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
             bottom_item_favorites.setChecked(false);
             tabLayout.setVisibility(View.VISIBLE);
             backHome = false;
-        }else if (backFavorites == true){
+        } else if (backFavorites == true) {
             super.onBackPressed();
             bottom_item_config.setChecked(false);
             bottom_item_home.setChecked(false);

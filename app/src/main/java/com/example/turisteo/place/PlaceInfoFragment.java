@@ -2,9 +2,11 @@ package com.example.turisteo.place;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -26,6 +28,8 @@ import com.example.turisteo.home.MainActivity;
 import com.example.turisteo.home.Place;
 import com.example.turisteo.map.MapActivity;
 import com.squareup.picasso.Picasso;
+
+import static android.Manifest.permission.CALL_PHONE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -152,6 +156,21 @@ public class PlaceInfoFragment extends Fragment {
                     }
                 });
 
+                // Si se presiona sobre el numero de telefono del lugar, se solicita permiso para realizar llamadas y si el usuario lo acepta se
+                // crea y ejecuta un intent para realizar la llamada, sino se le indica que debe aceptar el permiso antes de realizar una llamada
+                tv_phone.setOnClickListener(v -> {
+                    if(!tv_phone.getText().equals("-")){
+                        if (ContextCompat.checkSelfPermission(getContext(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                            Intent intent = new Intent(android.content.Intent.ACTION_CALL,
+                                    Uri.parse("tel:"+tv_phone.getText()));
+                            startActivity(intent);
+                        } else {
+                            requestPermissions(new String[]{CALL_PHONE}, 1);
+                            Toast.makeText(getContext(), "Debes aceptar el permiso para poder realizar llamadas desde la app", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                
                 // Boton para mostrar el lugar elegido en el mapa
                 btn_map.setOnClickListener(v -> {
                     Toast.makeText(getContext(), "Recuerda activar la ubicación del dispositivo", Toast.LENGTH_LONG).show();

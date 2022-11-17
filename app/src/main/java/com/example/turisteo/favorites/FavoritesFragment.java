@@ -86,6 +86,9 @@ public class FavoritesFragment extends Fragment {
         // Seteo cual es el item del bottom_navigation que debe estar activo
         setChekedBottomItem();
 
+        // Pongo en true "inFavorites" de MainActivity para el manejo del boton de volver hacia atras
+        ((MainActivity)this.getActivity()).inFavorites = true;
+
         // Creo una instancia de la BD local
         adminLocalDBFavorites = new AdminLocalDBFavorites(getActivity().getApplicationContext(), "favorites_places", null, 1);
 
