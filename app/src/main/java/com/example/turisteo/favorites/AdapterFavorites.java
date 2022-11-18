@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.turisteo.R;
 import com.example.turisteo.database_local.AdminLocalDBFavorites;
@@ -57,7 +56,6 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
         // Obtengo los elementos:
         ImageView img = view.findViewById(R.id.image);
         TextView tv_name = view.findViewById(R.id.tv_name);
-        ImageView icon_delete = view.findViewById(R.id.icon_delete);
 
         // Inicializo:
         // Uso la libreria "Picasso" para cargar imagenes desde una URL
@@ -66,19 +64,6 @@ public class AdapterFavorites extends BaseAdapter {      // recordar que extiend
                 .into(img);
 
         tv_name.setText(place.getName());
-
-        // Eliminar favorito
-        // Elimino aca porque tengo acceso al icon_delete y al favorito que quiero eliminar para acceder a su id
-        icon_delete.setOnClickListener(v -> {
-            adminLocalDBFavorites.deleteFavorite(place.getId());
-            Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
-            //intent.putExtra("goToFavorite", "");
-            //Intent intent = new Intent(context, MainActivity.class);
-            //context.startActivity(intent);
-            // TENGO QUE VER ESTO PORQUE NO PUEDO CERRAR LA PANTALLA. ADEMAS ESTOY ABRIENDO EL MAIN
-            // Y DEBERIA SER COMO REFRESCAR LA MISMA PANTALLA DE FAVORITOS Y CARGAR LOS QUE QUEDARON
-            // SIN EL ELIMINADO RECIEN, PERO NO PUDE HACERLO AUN.
-        });
 
         return view;
     }

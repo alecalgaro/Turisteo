@@ -45,6 +45,8 @@ public class PlaceInfoFragment extends Fragment {
 
     DBFirestore dbFirestore = new DBFirestore();
 
+    public Place place = null;
+
     TextView tv_title, tv_rating, tv_description, tv_dir, tv_phone, tv_web;
     ImageView image1, image2, image3;
     RatingBar ratingBar;
@@ -53,6 +55,8 @@ public class PlaceInfoFragment extends Fragment {
     public int number_reviews;
     String latitude, longitude;
     String id_document, collection, currentRating;
+
+    public boolean newFavorite = true;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -124,26 +128,47 @@ public class PlaceInfoFragment extends Fragment {
 
         // Bundle para recibir el objeto enviado:
         Bundle placeReceived = getArguments();
-        Place place = null;
 
         if(placeReceived != null) {   // quiere decir que tenemos argumentos para mostrar
             place = (Place) placeReceived.getSerializable("place");    // lo envie desde MainActivity con el key "place"
 
             if(place != null){      // si se recibio informacion con la clave "place"
                 warning.setVisibility(View.GONE);
-                loadInfo(place);
 
-                // Añadir lugar a favoritos
+                // Cargo la informacion del lugar
+                loadInfo(place);
+                // Cargo la calificacion actual del lugar
+                loadCurrentRating();
+
+                // Seteo el boton correspondiente dependiendo de si el lugar esta o no agregado a los favoritos de la BD local
+                if(adminLocalDBFavorites.getFavorite(id_document)){
+                    btn_addFavorite.setText("Eliminar de favoritos");
+                    newFavorite = false;
+                }else{
+                    btn_addFavorite.setText("Añadir a favoritos");
+                    newFavorite = true;
+                }
+
+                // Agregar o quitar lugar de favoritos
                 Place finalPlace = place;   // al usar la linea para insertar en la BD me pide agregar esto
                 btn_addFavorite.setOnClickListener(v -> {
-                    // Se añade el lugar a la BD local como favorito
-                    adminLocalDBFavorites.insertFavorite(
-                            finalPlace.getCollection(), finalPlace.getId(), finalPlace.getCategory(), finalPlace.getName(), finalPlace.getDescription_short(),
-                            finalPlace.getDescription_long(), finalPlace.getUrlImage1(), finalPlace.getUrlImage2(), finalPlace.getUrlImage3(),
-                            finalPlace.getDirection(), finalPlace.getPhone(), finalPlace.getWeb(), finalPlace.getLatitude(),
-                            finalPlace.getLongitude(), finalPlace.getStarsCount(), finalPlace.getStarsProm(), finalPlace.getNumber_reviews()
-                    );
-                    Toast.makeText(getContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
+                    // Si newFavorite = true se añade el lugar a la BD local como favorito
+                    if(newFavorite){
+                        adminLocalDBFavorites.insertFavorite(
+                                finalPlace.getCollection(), finalPlace.getId(), finalPlace.getCategory(), finalPlace.getName(), finalPlace.getDescription_short(),
+                                finalPlace.getDescription_long(), finalPlace.getUrlImage1(), finalPlace.getUrlImage2(), finalPlace.getUrlImage3(),
+                                finalPlace.getDirection(), finalPlace.getPhone(), finalPlace.getWeb(), finalPlace.getLatitude(),
+                                finalPlace.getLongitude(), finalPlace.getStarsCount(), finalPlace.getStarsProm(), finalPlace.getNumber_reviews()
+                        );
+                        btn_addFavorite.setText("Eliminar de favoritos");
+                        newFavorite = false;
+                        Toast.makeText(getContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
+                    }else{  // sino quiere decir que ya fue agregado asi que lo elimino de favoritos
+                        adminLocalDBFavorites.deleteFavorite(id_document);
+                        btn_addFavorite.setText("Añadir a favoritos");
+                        newFavorite = true;
+                        Toast.makeText(getContext(), "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                    }
                 });
 
                 // Intent para abrir pagina web o red social del lugar al presionar sobre el TextView
@@ -170,7 +195,7 @@ public class PlaceInfoFragment extends Fragment {
                         }
                     }
                 });
-                
+
                 // Boton para mostrar el lugar elegido en el mapa
                 btn_map.setOnClickListener(v -> {
                     Toast.makeText(getContext(), "Recuerda activar la ubicación del dispositivo", Toast.LENGTH_LONG).show();
@@ -215,7 +240,7 @@ public class PlaceInfoFragment extends Fragment {
                     public void run() {
                         if(dbFirestore.result_update == true){     // si la consulta fue existosa
                             Toast.makeText(getContext(), "Calificación actualizada.", Toast.LENGTH_LONG).show();
-                            tv_rating.setText(String.valueOf(stars_prom));      // actualizo el TextView
+                            tv_rating.setText(String.valueOf(stars_prom).substring(0, 3));      // actualizo el TextView
                         }else{
                             Toast.makeText(getContext(), "Hubo un error al actualizar la calificación.", Toast.LENGTH_LONG).show();
                         }
@@ -249,6 +274,22 @@ public class PlaceInfoFragment extends Fragment {
         if(currentRating != null){ ratingBar.setRating(Float.parseFloat(currentRating)); }
     }
 
+    // Metodo para consulta la calificacion actual del lugar y cargarla en el TextView
+    public void loadCurrentRating(){
+        // Espero cuatro segundos para que se realice la consulta del stars_prom y cargo la calificacion actual del lugar traida desde
+        // Firebase. Esto lo hago porque cuando el usuario realiza una calificacion se actualiza el tv_rating, pero si vuelvo hacia atras y
+        // luego entro nuevamente a ese lugar la calificacion no esta actualizada porque los datos de Firestore los obtengo en ConfigFragment
+        dbFirestore.getRatingPlace(place.getCollection(), place.getId());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(!dbFirestore.currentStarsProm.equals("")){     // si se realizo la consulta y ya actualizo el valor de currentStarsProm
+                    tv_rating.setText(dbFirestore.currentStarsProm.substring(0, 3));
+                }
+            }}, 4000);
+    }
+
+    // Metodo para setear el boton correspondient en el bottom_navigation
     @SuppressLint("RestrictedApi")
     public void setChekedBottomItem() {
         ((MainActivity)this.getActivity()).bottom_item_config.setChecked(false);

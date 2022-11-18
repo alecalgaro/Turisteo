@@ -44,8 +44,22 @@ public class AdminLocalDBFavorites extends SQLiteOpenHelper {
         db.execSQL(sqlCreate);     // también se podria hacer llamando de nuevo a onCreate(db);
     }
 
+    // Obtener si existe un favorito en la BD con un cierto id
+    public boolean getFavorite(String id_fav){
+        SQLiteDatabase db = getWritableDatabase();
+        String[] args = new String[] {id_fav};
+        Cursor c = db.rawQuery(" SELECT id FROM Favorites WHERE id =?", args);
+
+        // Si existe un favorito con ese id retorno true, sino false
+        if (c.moveToFirst()) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     // Listar todos los favoritos de la BD:
-    public void getFavorites(ArrayList<Place> arrayList) {       // uso un array de datos para añadirlos al ListView
+    public void getAllFavorites(ArrayList<Place> arrayList) {       // uso un array de datos para añadirlos al ListView
         SQLiteDatabase db = getWritableDatabase();
         //Cursor c = db.rawQuery(" SELECT id, image, name FROM Favorites", null);
         Cursor c = db.rawQuery(" SELECT collection, id, category, name, description_short, description_long," +
@@ -120,8 +134,9 @@ public class AdminLocalDBFavorites extends SQLiteOpenHelper {
     // Eliminar favorito de la BD:
     public void deleteFavorite(String id_fav) {     // tambien puedo eliminar por nombre porque todos tendran nombres distintos
         SQLiteDatabase db = getWritableDatabase();
-        //db.execSQL("DELETE FROM Favorites WHERE id = " + id_fav + ";");      // con sentencia SQL
-        db.delete("Favorites", "id=" + id_fav, null);   // con API de SQLite
+        String[] args = new String[] {id_fav};
+        db.execSQL("DELETE FROM Favorites WHERE id =?", args);      // con sentencia SQL
+        //db.delete("Favorites", "id=" + id_fav, null);   // con API de SQLite
         db.close();
     }
 

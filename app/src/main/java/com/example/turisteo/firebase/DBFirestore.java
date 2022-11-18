@@ -1,5 +1,7 @@
 package com.example.turisteo.firebase;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.example.turisteo.home.Place;
@@ -7,6 +9,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,9 +31,12 @@ public class DBFirestore {
 
     public String collection_db;
 
+    public String currentStarsProm = "";
+
     public boolean result = false;
     public boolean result_update = false;
 
+    // Metodo para obtener la informacion de todos los lugares de la ciudad elegida (coleccion)
     public void getDataFirestore(String collection){
         // Leo todos los documentos de la base de datos en Firebase que correspondan a la coleccion de la ciudad elegida (recibida en el path):
         collection_db = collection;      // para poder pasarla a cada Place
@@ -100,7 +107,7 @@ public class DBFirestore {
                 });
     }
 
-    // Actualizacion de la valoracione (stars_count, starts_prom y number_reviews) de un lugar
+    // Metodo para actualizar la calificacion de un lugar (stars_count, starts_prom y number_reviews)
     public void updateValoration(String collection, String id_document, String stars_count, String stars_prom, String number_reviews){
         // En un HashMap se van agregando (put) los campos a actualizar (clave, valor)
         Map<String, Object> map = new HashMap<>();
@@ -124,5 +131,20 @@ public class DBFirestore {
         });
     }
 
+    // Metodo para obtener la calificacion actual de un lugar elegido
+    public void getRatingPlace(String collection, String id_document){
+        DocumentReference docRef = db.collection(collection).document(id_document);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        currentStarsProm = document.getString("stars_prom");
+                    }
+                }
+            }
+        });
+    }
 
 }

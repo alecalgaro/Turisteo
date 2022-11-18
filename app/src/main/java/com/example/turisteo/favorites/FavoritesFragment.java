@@ -103,8 +103,9 @@ public class FavoritesFragment extends Fragment {
 
         adapterFavorites = new AdapterFavorites(getContext(), arrayList);
         lv_favorites.setAdapter(adapterFavorites);
+
         // Obtengo los favoritos de la BD local (se guardan en el arrayList y se muestran)
-        adminLocalDBFavorites.getFavorites(arrayList);
+        adminLocalDBFavorites.getAllFavorites(arrayList);
 
         // Si se presiona sobre la card de un favorito abro su PlaceInfoFragment para ver la información del mismo:
         lv_favorites.setOnItemClickListener(new AdapterView.OnItemClickListener() {    // Recordar que es setOnItemClick... no setOnClick...
