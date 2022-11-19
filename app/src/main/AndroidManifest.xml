@@ -15,18 +15,26 @@
         android:roundIcon="@mipmap/icon_app_turisteo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Turisteo">
-        <activity android:name=".map.MapActivity"></activity>
-        <activity android:name=".login.ForgotPasswordActivity" />
-        <activity android:name=".register.RegisterActivity" />
-        <activity android:name=".home.MainActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".splashscreen.SplashScreenActivity">
+
+        <activity android:name=".splashscreen.SplashScreenActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".login.ForgotPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".register.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".home.MainActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".map.MapActivity"
+            android:configChanges="orientation|screenSize" />
+
         <!-- Para notificaciones con firebase -->
         <service
             android:name=".firebase.MyFirebaseMessagingService"
