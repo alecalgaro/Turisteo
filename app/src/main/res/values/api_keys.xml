@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDDVG_h01OWEu7KGm97Se-uxGentCPK7Fc</string>
+    <string name="api_openweathermap">d319e23ac8ff17680001c1213ccec74e</string>
 </resources>

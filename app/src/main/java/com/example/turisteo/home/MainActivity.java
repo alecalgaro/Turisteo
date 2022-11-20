@@ -16,6 +16,7 @@ import com.example.turisteo.R;
 import com.example.turisteo.config.ConfigFragment;
 import com.example.turisteo.favorites.FavoritesFragment;
 import com.example.turisteo.place.PlaceInfoFragment;
+import com.example.turisteo.weather.WeatherFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
     public PlaceInfoFragment placeInfoFragment = new PlaceInfoFragment();
     public FavoritesFragment favoritesFragment = new FavoritesFragment();
     public ConfigFragment configFragment = new ConfigFragment();
+    public WeatherFragment weatherFragment = new WeatherFragment();
 
     // Fragments del menu de navegacion superior en el Home, para filtrar por categoria de lugar
     public HistoricalPlacesFragment historicalPlacesFragment = new HistoricalPlacesFragment();
@@ -35,9 +37,14 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
     public FoodPlacesFragment foodPlacesFragment = new FoodPlacesFragment();
     public OthersPlacesFragment othersPlacesFragment = new OthersPlacesFragment();
 
+    // Latitud, longitud y ciudad elegida, para usar en WeatherFragment para el clima
+    public String city = "";
+    public String latitude = "0";
+    public String longitude = "0";
+
     // BottomNavigation para el menu inferior
     public BottomNavigationView navigation;
-    public BottomNavigationItemView bottom_item_config, bottom_item_home, bottom_item_place, bottom_item_favorites, bottom_item_map;
+    public BottomNavigationItemView bottom_item_config, bottom_item_home, bottom_item_place, bottom_item_favorites, bottom_item_map, bottom_item_weather;
 
     // TabLayout para el menu superior usado en la pantalla principal
     public TabLayout tabLayout;
@@ -66,14 +73,10 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
         bottom_item_place = findViewById(R.id.placeFragment);
         bottom_item_favorites = findViewById(R.id.favoritesFragment);
         bottom_item_map = findViewById(R.id.mapFragment);
+        bottom_item_weather = findViewById(R.id.weatherFragment);
 
         // Al iniciar cargo el configFragment
-        String goToFavorite = getIntent().getStringExtra("goToFavorite");   // esto lo puse para probar ir al favoritesFragment cuando elimino
-        if(goToFavorite != null){                                                 // uno y asi tener la lista actualizada pero no sirve porque es como
-            loadFragment(favoritesFragment);                                      // reiniciar y ya no aparen los datos de lugares en inicio
-        }else{
-            loadFragment(configFragment);
-        }
+        loadFragment(configFragment);
 
         // TabLayout: menu de navegacion superior para mostrar lugares por tipo (lugares historicos, restaurantes, etc.)
         // Lo uso en MainActivity porque debo ir reemplazando el fragment y sino perdería esta barra de navegacion
@@ -125,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
                     return true;
                 case R.id.favoritesFragment:
                     loadFragment(favoritesFragment);
+                    tabLayout.setVisibility(View.GONE);
+                    return true;
+                case R.id.weatherFragment:
+                    loadFragment(weatherFragment);
                     tabLayout.setVisibility(View.GONE);
                     return true;
             }

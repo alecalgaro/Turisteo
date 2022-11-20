@@ -48,6 +48,11 @@ public class ConfigFragment extends Fragment {
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterItems;
 
+    // Latitud, longitud y ciudad elegida para pasarla al MainActivity
+    public String latitude = "";
+    public String longitude = "";
+    public String city = "";
+
     DBFirestore dbFirestore = new DBFirestore();
     String path;
 
@@ -121,7 +126,12 @@ public class ConfigFragment extends Fragment {
                 tv_progressBar.setVisibility(View.VISIBLE);
 
                 switch (position){
-                    case 0: path = "places_chajari"; break;
+                    case 0:
+                        path = "places_chajari";
+                        city = "Chajari";
+                        latitude = "-30.7538";
+                        longitude = "-57.9867";
+                        break;
                     // si se agregan mas ciudades en el listado se irian actualizando los casos aca para pasar el path
                     // correspondiente para la consulta a la BD
                 }
@@ -165,9 +175,10 @@ public class ConfigFragment extends Fragment {
         HistoricalPlacesFragment historicalPlacesFragment = new HistoricalPlacesFragment();
         ((MainActivity)this.getActivity()).loadFragment(historicalPlacesFragment);
         ((MainActivity)this.getActivity()).tabLayout.setVisibility(View.VISIBLE);
-        // Luego de hacer click en la ciudad y cargar al arrayList con los lugares, suele demorar unos segundos en recibir la info desde Firebase,
-        // entonces le puse un progressBar para indicar que se estan cargando los datos y una vez que estan listos desaparece, asi cuando
-        // el usuario vaya al HomeFragment desde el bottom_navigation ya podra ver todos los lugares cargados.
+        // Guardo la ciudad, latitud, longitud en el MainActivity para poder acceder luego en WeatherFragment
+        ((MainActivity)this.getActivity()).city = city;
+        ((MainActivity)this.getActivity()).latitude = latitude;
+        ((MainActivity)this.getActivity()).longitude = longitude;
     }
 
     @SuppressLint("RestrictedApi")

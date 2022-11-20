@@ -20,4 +20,9 @@
         android:icon="@drawable/ic_favorite"
         android:title="Favoritos">
     </item>
+    <item
+        android:id="@+id/weatherFragment"
+        android:icon="@drawable/ic_weather"
+        android:title="Clima">
+    </item>
 </menu>
