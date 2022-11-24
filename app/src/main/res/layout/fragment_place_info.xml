@@ -44,12 +44,12 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="20dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="14dp"
                 android:text="Nombre del lugar"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="21sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,12 +57,12 @@
                 android:id="@+id/tv_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="20dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="14dp"
                 android:text="5.0"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="21sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:paddingRight="5dp"
-                android:paddingBottom="20dp"
+                android:paddingBottom="14dp"
                 android:src="@drawable/ic_star"
                 app:layout_constraintEnd_toStartOf="@+id/tv_rating"
                 app:layout_constraintTop_toTopOf="parent" />

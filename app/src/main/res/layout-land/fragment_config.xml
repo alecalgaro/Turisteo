@@ -39,7 +39,7 @@
         android:id="@+id/tv_progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cargando datos en inicio..."
+        android:text="Cargando datos..."
         android:textSize="18dp"
         android:layout_marginBottom="30dp"
         android:visibility="invisible"

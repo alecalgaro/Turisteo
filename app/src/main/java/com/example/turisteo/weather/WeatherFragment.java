@@ -120,7 +120,7 @@ public class WeatherFragment extends Fragment {
 
         // Si ya se eligio una ciudad en ConfigFragment (tendremos city, latitude y longitude) puedo hacer la consulta,
         // si no es asi dejo el mensaje indicando al usuario que debe elegir una ciudad para ver su clima
-        if(!city.equals("") && !latitude.equals("0") && !longitude.equals("0")){
+        if(!city.equals("")){
             tv_warning.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
             tv_progressBar.setVisibility(View.VISIBLE);
@@ -182,11 +182,11 @@ public class WeatherFragment extends Fragment {
                                 break;
                         }
 
-                        // Temperatura actual, maxima y minima
+                        // Temperatura actual, maxima y minima (con un digito luego de la coma)
                         JSONObject jsonArrayMain = jsonObject.getJSONObject("main");
-                        tv_temp.setText(jsonArrayMain.getString("temp"));
-                        tv_value_max.setText(jsonArrayMain.getString("temp_max"));
-                        tv_value_min.setText(jsonArrayMain.getString("temp_min"));
+                        tv_temp.setText(jsonArrayMain.getString("temp").substring(0, 4));
+                        tv_value_max.setText(jsonArrayMain.getString("temp_max").substring(0, 4));
+                        tv_value_min.setText(jsonArrayMain.getString("temp_min").substring(0, 4));
 
                         tv_city.setText(city);
                         background.setVisibility(View.INVISIBLE);
@@ -194,7 +194,7 @@ public class WeatherFragment extends Fragment {
                         tv_progressBar.setVisibility(View.INVISIBLE);
 
                     } catch (JSONException e) {
-                        Toast.makeText(getContext(), "Ocurrio un error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "No se pudo realizar la consulta del clima.", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
                 }

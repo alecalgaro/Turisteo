@@ -135,7 +135,7 @@ public class PlaceInfoFragment extends Fragment {
             if(place != null){      // si se recibio informacion con la clave "place"
                 warning.setVisibility(View.GONE);
 
-                // Cargo la informacion del lugar
+                // Cargo la informacion del lugar recibido
                 loadInfo(place);
                 // Cargo la calificacion actual del lugar
                 loadCurrentRating();
@@ -223,7 +223,7 @@ public class PlaceInfoFragment extends Fragment {
                     adminLocalDBRatings.insertRating(id_document, String.valueOf(rating));      // inserto en la tabla de ratings de la BD local
                 } else {
                     // Si el usuario ya califico antes el lugar debo actualizar su calificacion, no sumar una nueva, entonces
-                    // a la cantidad de estrellas le resto la calificacion actual del usuario, le sumo la nueva y divido por el numero de
+                    // a la cantidad de estrellas le resto la calificacion actual del usuario, le sumo la nueva y luego divido por el numero de
                     // calificaciones que ya habia porque no es una nueva sino una actualizacion, asi que no modifico el number_reviews.
                     stars_count = stars_count - Float.parseFloat(currentRating) + rating;
                     adminLocalDBRatings.updateRating(id_document, String.valueOf(rating));      // actualizo la tabla de ratings de la BD local
@@ -266,9 +266,9 @@ public class PlaceInfoFragment extends Fragment {
         Picasso.get().load(place.getUrlImage3()).into(image3);
         latitude = place.getLatitude();
         longitude = place.getLongitude();
-        stars_count = Float.parseFloat(place.getStarsCount());
-        stars_prom = Float.parseFloat(place.getStarsProm());
-        number_reviews = Integer.valueOf(place.getNumber_reviews());
+        //stars_count = Float.parseFloat(place.getStarsCount());
+        //stars_prom = Float.parseFloat(place.getStarsProm());
+        //number_reviews = Integer.parseInt(place.getNumber_reviews());
         // Consulto en la BD local si el usuario ya hizo una calificacion del lugar:
         currentRating = adminLocalDBRatings.getRating(id_document);
         if(currentRating != null){ ratingBar.setRating(Float.parseFloat(currentRating)); }
@@ -276,17 +276,21 @@ public class PlaceInfoFragment extends Fragment {
 
     // Metodo para consulta la calificacion actual del lugar y cargarla en el TextView
     public void loadCurrentRating(){
-        // Espero cuatro segundos para que se realice la consulta del stars_prom y cargo la calificacion actual del lugar traida desde
-        // Firebase. Esto lo hago porque cuando el usuario realiza una calificacion se actualiza el tv_rating, pero si vuelvo hacia atras y
-        // luego entro nuevamente a ese lugar la calificacion no esta actualizada porque los datos de Firestore los obtengo en ConfigFragment
-        dbFirestore.getRatingPlace(place.getCollection(), place.getId());
+        // Espero cuatro segundos para que se realice la consulta y cargo la calificacion actual del lugar traida desde Firebase.
+        // Esto lo hago porque cuando el usuario realiza una calificacion se actualiza el tv_rating, pero si vuelvo hacia atras y
+        // luego entro nuevamente a ese lugar necesito que se consulte nuevamente para tener la calificacion actualizada, porque los
+        // datos de Firestore los obtengo en ConfigFragment.
+       dbFirestore.getRatingPlace(place.getCollection(), place.getId());
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(!dbFirestore.currentStarsProm.equals("")){     // si se realizo la consulta y ya actualizo el valor de currentStarsProm
                     tv_rating.setText(dbFirestore.currentStarsProm.substring(0, 3));
+                    number_reviews = Integer.parseInt(dbFirestore.currentNumberReviews);
+                    stars_count = Float.parseFloat(dbFirestore.currentStarsCount);
+                    stars_prom = Float.parseFloat(dbFirestore.currentStarsProm);
                 }
-            }}, 4000);
+            }}, 3000);
     }
 
     // Metodo para setear el boton correspondient en el bottom_navigation

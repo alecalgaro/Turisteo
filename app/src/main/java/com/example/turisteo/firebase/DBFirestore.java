@@ -32,6 +32,8 @@ public class DBFirestore {
     public String collection_db;
 
     public String currentStarsProm = "";
+    public String currentStarsCount = "";
+    public String currentNumberReviews = "";
 
     public boolean result = false;
     public boolean result_update = false;
@@ -132,6 +134,7 @@ public class DBFirestore {
     }
 
     // Metodo para obtener la calificacion actual de un lugar elegido
+    // (actualiza las variables stars_count, stars_prom y number_reviews)
     public void getRatingPlace(String collection, String id_document){
         DocumentReference docRef = db.collection(collection).document(id_document);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -140,7 +143,9 @@ public class DBFirestore {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        currentStarsCount = document.getString("stars_count");
                         currentStarsProm = document.getString("stars_prom");
+                        currentNumberReviews = document.getString("number_reviews");
                     }
                 }
             }
