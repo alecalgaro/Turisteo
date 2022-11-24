@@ -1,7 +1,5 @@
 package com.example.turisteo.firebase;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.example.turisteo.home.Place;
@@ -50,7 +48,7 @@ public class DBFirestore {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {      // si la consulta fue exitosa
                             result = true;
-                            arrayListHistoricalPlaces.clear();      // limpio el array antes de agregar
+                            arrayListHistoricalPlaces.clear();      // limpio los arrays antes de agregar
                             arrayListBeachPlaces.clear();
                             arrayListFoodPlaces.clear();
                             arrayListOthersPlaces.clear();

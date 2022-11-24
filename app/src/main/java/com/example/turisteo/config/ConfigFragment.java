@@ -1,11 +1,9 @@
 package com.example.turisteo.config;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -24,16 +22,8 @@ import com.example.turisteo.R;
 import com.example.turisteo.firebase.DBFirestore;
 import com.example.turisteo.home.HistoricalPlacesFragment;
 import com.example.turisteo.home.MainActivity;
-import com.example.turisteo.home.Place;
 import com.example.turisteo.login.LoginActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -132,8 +122,8 @@ public class ConfigFragment extends Fragment {
                         latitude = "-30.7538";
                         longitude = "-57.9867";
                         break;
-                    // si se agregan mas ciudades en el listado se irian actualizando los casos aca para pasar el path
-                    // correspondiente para la consulta a la BD
+                    // si se agregan mas ciudades en el listado se irian agregando los case aca para pasar el path, city, latitude y longitude
+                    // correspondiente a la ciudad para la consulta a la BD
                 }
                 dbFirestore.getDataFirestore(path);     // hago la consulta a la base de datos
 

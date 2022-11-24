@@ -50,7 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            //finish();
         });
     }
 

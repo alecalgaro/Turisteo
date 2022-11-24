@@ -61,15 +61,14 @@ public class AdminLocalDBFavorites extends SQLiteOpenHelper {
     // Listar todos los favoritos de la BD:
     public void getAllFavorites(ArrayList<Place> arrayList) {       // uso un array de datos para añadirlos al ListView
         SQLiteDatabase db = getWritableDatabase();
-        //Cursor c = db.rawQuery(" SELECT id, image, name FROM Favorites", null);
         Cursor c = db.rawQuery(" SELECT collection, id, category, name, description_short, description_long," +
                 "url_image1, url_image2, url_image3, direction, phone, web, latitude, longitude," +
                 "stars_count, stars_prom, number_reviews " +
                 "FROM Favorites", null);
 
-        // Nos aseguramos de que existe al menos un registro:
+        // Me aseguro que existe al menos un registro:
         if (c.moveToFirst()) {
-            // Recorremos el cursor hasta que no haya mas registros (c.moveToNext()):
+            // Reocrro el cursor hasta que no haya mas registros (c.moveToNext()):
             do {
                 // Voy obteniendo los datos:
                 String collection = c.getString(0);
@@ -132,7 +131,7 @@ public class AdminLocalDBFavorites extends SQLiteOpenHelper {
     }
 
     // Eliminar favorito de la BD:
-    public void deleteFavorite(String id_fav) {     // tambien puedo eliminar por nombre porque todos tendran nombres distintos
+    public void deleteFavorite(String id_fav) {
         SQLiteDatabase db = getWritableDatabase();
         String[] args = new String[] {id_fav};
         db.execSQL("DELETE FROM Favorites WHERE id =?", args);      // con sentencia SQL

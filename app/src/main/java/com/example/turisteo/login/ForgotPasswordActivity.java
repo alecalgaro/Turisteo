@@ -33,7 +33,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
-    // Metood para validar que el correo ingresado sea valido
+    // Metodo para validar que el correo ingresado sea valido
     public void validateData(){
         String email = textField_email.getText().toString().trim();
 
@@ -41,7 +41,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             textField_email.setError("Ingrese un correo valido");
             return;
         }else{
-            sendEmail(email);   // si el correo era valido, llamamos este metodo
+            sendEmail(email);   // si el correo es valido llamo al metodo sendEmail
         }
     }
 

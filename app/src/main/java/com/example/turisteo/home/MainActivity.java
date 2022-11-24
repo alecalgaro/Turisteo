@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.turisteo.R;
 import com.example.turisteo.config.ConfigFragment;
@@ -147,11 +146,11 @@ public class MainActivity extends AppCompatActivity implements IComunicationFrag
         transaction.commit();
     }
 
-    @Override
     // Se sobreescribe este metodo porque es de la interface que se implementa.
     // Si llamo a la funcion sendPlace desde un fragment de Home (de listado de lugares) pongo backHome en true y backFavorites
     // en false, y uso un "add" para que permanezca esa pantalla abierta en el lugar donde quedo para poder volver atras.
     // Y si la llamo desde FavoritesFragment lo contrario, para la funcionalidad del boton onBackPressed abajo y uso "add".
+    @Override
     public void sendPlace(Place place, String backFragment) {
         if(backFragment.equals("home")){
             backHome = true;

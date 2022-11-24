@@ -276,7 +276,7 @@ public class PlaceInfoFragment extends Fragment {
 
     // Metodo para consulta la calificacion actual del lugar y cargarla en el TextView
     public void loadCurrentRating(){
-        // Espero cuatro segundos para que se realice la consulta y cargo la calificacion actual del lugar traida desde Firebase.
+        // Espero para que se realice la consulta y cargo la calificacion actual del lugar traida desde Firebase.
         // Esto lo hago porque cuando el usuario realiza una calificacion se actualiza el tv_rating, pero si vuelvo hacia atras y
         // luego entro nuevamente a ese lugar necesito que se consulte nuevamente para tener la calificacion actualizada, porque los
         // datos de Firestore los obtengo en ConfigFragment.

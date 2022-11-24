@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         tv_forgotPassword = findViewById(R.id.tv_forgotPassword);
         btn_loginGoogle = findViewById(R.id.btn_loginGoogle);
 
+        // Instancia de FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
         // Boton para iniciar sesion con email y password
@@ -81,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            //finish();
         });
 
         // Si no tiene una cuenta

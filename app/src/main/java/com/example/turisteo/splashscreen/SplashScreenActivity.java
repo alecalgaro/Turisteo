@@ -29,7 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         // Para que la pantalla de splash screen se vea en pantalla completa, sin la barra de arriba
-        // (no hace falta porque ya quitamos la barra de arriba en el tema)
+        // (no hace falta porque ya quite la barra de arriba en el tema)
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Animaciones:

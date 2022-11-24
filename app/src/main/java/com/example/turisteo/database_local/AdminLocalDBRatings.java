@@ -43,7 +43,7 @@ public class AdminLocalDBRatings extends SQLiteOpenHelper {
         String[] args = new String[] {document};
         Cursor c = db.rawQuery(" SELECT rating FROM Ratings WHERE document=?", args, null);
 
-        // Nos aseguramos de que existe al menos un registro:
+        // Me aseguro que existe al menos un registro:
         if (c.moveToFirst()) {
             rating = c.getString(0);
         }
