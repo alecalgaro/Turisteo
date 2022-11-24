@@ -120,7 +120,7 @@ public class HistoricalPlacesFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        // Esto es necesario para establecer la conexión entre la lista de peliculas y la información de pelicula
+        // Esto es necesario para establecer la conexión entre la lista de lugares y la información del lugar
 
         // Si el contexto que le esta llegando es una instancia de una activity:
         if (context instanceof Activity) {

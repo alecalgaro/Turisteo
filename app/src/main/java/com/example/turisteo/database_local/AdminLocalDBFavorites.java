@@ -45,6 +45,7 @@ public class AdminLocalDBFavorites extends SQLiteOpenHelper {
     }
 
     // Obtener si existe un favorito en la BD con un cierto id
+    // Se usa para saber si el lugar ya fue o no agregado a favoritos para mostrar el boton para agregar o quitar de favoritos
     public boolean getFavorite(String id_fav){
         SQLiteDatabase db = getWritableDatabase();
         String[] args = new String[] {id_fav};

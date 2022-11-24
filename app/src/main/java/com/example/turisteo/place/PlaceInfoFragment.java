@@ -239,10 +239,10 @@ public class PlaceInfoFragment extends Fragment {
                     @Override
                     public void run() {
                         if(dbFirestore.result_update == true){     // si la consulta fue existosa
-                            Toast.makeText(getContext(), "Calificación actualizada.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Calificación actualizada.", Toast.LENGTH_SHORT).show();
                             tv_rating.setText(String.valueOf(stars_prom).substring(0, 3));      // actualizo el TextView
                         }else{
-                            Toast.makeText(getContext(), "Hubo un error al actualizar la calificación.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Hubo un error al actualizar la calificación.", Toast.LENGTH_SHORT).show();
                         }
                     }}, 2000);
             }
@@ -266,12 +266,18 @@ public class PlaceInfoFragment extends Fragment {
         Picasso.get().load(place.getUrlImage3()).into(image3);
         latitude = place.getLatitude();
         longitude = place.getLongitude();
-        //stars_count = Float.parseFloat(place.getStarsCount());
-        //stars_prom = Float.parseFloat(place.getStarsProm());
-        //number_reviews = Integer.parseInt(place.getNumber_reviews());
         // Consulto en la BD local si el usuario ya hizo una calificacion del lugar:
-        currentRating = adminLocalDBRatings.getRating(id_document);
+        adminLocalDBRatings.getRating(id_document);
+        currentRating = adminLocalDBRatings.rating;
         if(currentRating != null){ ratingBar.setRating(Float.parseFloat(currentRating)); }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                currentRating = adminLocalDBRatings.rating;
+                if(currentRating != null){ ratingBar.setRating(Float.parseFloat(currentRating)); }
+            }}, 1000);
+        //currentRating = adminLocalDBRatings.getRating(id_document);
+        //if(currentRating != null){ ratingBar.setRating(Float.parseFloat(currentRating)); }
     }
 
     // Metodo para consulta la calificacion actual del lugar y cargarla en el TextView

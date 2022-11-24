@@ -41,7 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         tvSplashScreen.setAnimation(animationTextSplash);
         imgLogo.setAnimation(animationLogo);
 
-        // Tiempo despues del cual el Splass Screen desaparece y se inicia el nuevo activity
+        // Tiempo despues del cual el Splash Screen desaparece y se inicia el nuevo activity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Handler;
 
 public class AdminLocalDBRatings extends SQLiteOpenHelper {
 
@@ -12,6 +13,8 @@ public class AdminLocalDBRatings extends SQLiteOpenHelper {
 
     private static final int db_version = 1;
     private static final String db_nombre = "ratings";
+
+    public String rating = null;
 
     // Sentencia para la creación de la tabla Ratings:
     String sqlCreate = "CREATE TABLE Ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, document TEXT, rating TEXT)";
@@ -37,8 +40,8 @@ public class AdminLocalDBRatings extends SQLiteOpenHelper {
 
     // Obtener el rating asignado a un lugar.
     // Si al consultar sigue siendo rating = null es porque el usuario aun no hizo una valoracion para ese document.
-    public String getRating(String document) {
-        String rating = null;
+    public void getRating(String document) {
+        //String rating = null;
         SQLiteDatabase db = getWritableDatabase();
         String[] args = new String[] {document};
         Cursor c = db.rawQuery(" SELECT rating FROM Ratings WHERE document=?", args, null);
@@ -48,7 +51,7 @@ public class AdminLocalDBRatings extends SQLiteOpenHelper {
             rating = c.getString(0);
         }
         db.close();
-        return rating;
+        //return rating;
     }
 
     // Insertar nueva valoracion a un lugar:
